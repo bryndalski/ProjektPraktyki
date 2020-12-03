@@ -1,6 +1,4 @@
 import xlrd
-import json
-import array as array
 wb = xlrd.open_workbook('./temp/temp.xlsx')
 sheet = wb.sheet_by_index(0)
 # print(sheet.row_values(1))
@@ -9,22 +7,21 @@ sheet = wb.sheet_by_index(0)
 #
 
 
-def fetchModel(filePath, sheetIndex):
+def fetchModel(filePath, sheetName):
     workingSheet = xlrd.open_workbook(filePath)              # extract file
-    workingSheet = workingSheet.sheet_by_index(sheetIndex)
-    dataArray = workingSheet.row_values(0)  # extract column names
-    dataModel = dict.fromkeys(dataArray, '')
-    # print(dataModel)
-    # print(type(dataModel))
+    workingSheet = workingSheet.sheet_by_name(sheetName)
+    dataList = workingSheet.row_values(0)  # extract column names
+    dataModel = dict.fromkeys(dataList, '')
     return dataModel
 
 
-def rowToJSON(filePath, sheetIndex, dataModel):
+def rowToJSON(filePath, sheetName):
+    dataModel = fetchModel(filePath, sheetName)
     dataToSend = []
     workingSheet = xlrd.open_workbook(filePath)  # extract file
     sheetDatamode = workingSheet.datemode
-    workingSheet = workingSheet.sheet_by_index(sheetIndex)
-    for row in range(2, workingSheet.nrows):  
+    workingSheet = workingSheet.sheet_by_name(sheetName)
+    for row in range(2, 3):  # workingSheet.nrows
         workingRow = []
         for cell in range(0, workingSheet.ncols):
             if workingSheet.cell(row, cell).ctype == 3:
@@ -39,11 +36,8 @@ def rowToJSON(filePath, sheetIndex, dataModel):
 
             pass
         singleRow = dict(zip(dataModel, workingRow))
+        singleRow.update({"sheetGrop": sheetName})
         dataToSend.append(singleRow)
     pass
     print(str(dataToSend))
     return
-
-
-# 3)
-rowToJSON('./temp/temp.xlsx', 0, fetchModel('./temp/temp.xlsx', 0))
