@@ -16,3 +16,8 @@
   cursor: pointer;
   font-size: 30pt;
 }
+.navigatorSide .separator {
+  background-color: #727272;
+  width: 90%;
+  height: 2px;
+}
