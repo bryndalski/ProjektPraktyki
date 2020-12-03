@@ -21,7 +21,7 @@ def rowToJSON(filePath, sheetName):
     workingSheet = xlrd.open_workbook(filePath)  # extract file
     sheetDatamode = workingSheet.datemode
     workingSheet = workingSheet.sheet_by_name(sheetName)
-    for row in range(2, 3):  # workingSheet.nrows
+    for row in range(1, workingSheet.nrows):  # workingSheet.nrows
         workingRow = []
         for cell in range(0, workingSheet.ncols):
             if workingSheet.cell(row, cell).ctype == 3:
@@ -37,7 +37,8 @@ def rowToJSON(filePath, sheetName):
             pass
         singleRow = dict(zip(dataModel, workingRow))
         singleRow.update({"sheetGrop": sheetName})
+
         dataToSend.append(singleRow)
     pass
-    print(str(dataToSend))
+    # print(str(dataToSend))
     return

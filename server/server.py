@@ -4,7 +4,7 @@ from serverModules.excelReader import rowToJSON   #importing function converting
 
 rowToJSON('./temp/temp.xlsx', 'TG')
 
-def createApp(config_object='projekt.settings'):
-    app= Flask(__name__)
-    app.config.from_object(config_object)
-    return app
+# def createApp(config_object='projekt.settings'):
+#     app= Flask(__name__)
+#     app.config.from_object(config_object)
+#     return app
