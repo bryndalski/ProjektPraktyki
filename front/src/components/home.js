@@ -32,8 +32,8 @@ const HomePage = () => {
                 <i title="Search" onClick={() => ChangeSearchModalStatus(true)} className="fa fa-search"></i>
                 <i title="Filters" onClick={() => ChangeFilterModalStatus(true)} className="fa fa-filter"></i>
                 <div className="separator"></div>
-                <i title="Sheets words" onClick={() => ChangeSheetModalStatus(true)} className="fa fa-file-excel-o"></i>
-                <i title="Upload Sheet words" onClick={() => ChangeImportModalStatus(true)} className="fa fa-upload"></i>
+                <i title="Sheets" onClick={() => ChangeSheetModalStatus(true)} className="fa fa-file-excel-o"></i>
+                <i title="Upload Sheet " onClick={() => ChangeImportModalStatus(true)} className="fa fa-upload"></i>
                 <i title="Download sheet" onClick={() => ChangeExportModalStatus(true)} className="fa fa-download"></i>
                 <div className="separator"></div>
                 <i title="Save changes" onClick={() => ChangeExportModalStatus(true)} className="fa fa-chevron-circle-down"></i>
@@ -47,7 +47,7 @@ const HomePage = () => {
             </Modal> */}
             <Modal isOpen={SettingsModalStatus}>
                 <SettingsComponent />
-                <button onClick={() => ChangeSettingsModalStatus(false)}>  OFF  </button>
+                <button onClick={() => ChangeSettingsModalStatus(false)}>   </button>
             </Modal>
             <Modal isOpen={SearchModalStatus}>
                 <SearchComponent />

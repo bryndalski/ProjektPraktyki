@@ -4,6 +4,7 @@ function FilterComponent(props) {
 
     return (
         <h1>Filters</h1>
+        
     )
 }
 

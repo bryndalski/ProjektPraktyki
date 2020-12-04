@@ -1,6 +1,5 @@
 import xlrd
-wb = xlrd.open_workbook('./temp/temp.xlsx')
-sheet = wb.sheet_by_index(0)
+import os
 # print(sheet.row_values(1))
 #
 # @desc
@@ -42,3 +41,4 @@ def rowToJSON(filePath, sheetName):
     pass
     # print(str(dataToSend))
     return
+fetchModel('../temp/temp.xlsx','TG')

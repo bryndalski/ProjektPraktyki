@@ -3,7 +3,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function SearchComponent(props) {
 
     return (
-        <h1>SearchComponent</h1>
+        <div className="searchContainer">
+            {/* <h1>Search</h1>
+            <form>
+                
+                <input type="text"></input>
+            </form> */}
+        </div>
     )
 }
 

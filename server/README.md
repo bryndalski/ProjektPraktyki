@@ -2,7 +2,5 @@
  Prjekt apli na pratyki 
 ======
 used packages
-xlrd ==== reads excel file
+xlrd ==== reads excel 
 flask
-flask-pymongo
-pyhon-dotenv

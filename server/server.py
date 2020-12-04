@@ -1,10 +1,32 @@
-from flask import Flask
-from flask import app
-from serverModules.excelReader import rowToJSON   #importing function converting xlms data to list 
+from flask import Flask, app ,request
+from flask_cors import CORS
+import xlrd
+app=Flask(__name__)
+CORS(app)
 
-rowToJSON('./temp/temp.xlsx', 'TG')
+#function
+def fetchSheets(filePath):
+    print(filePath)
+    workingSheet = xlrd.open_workbook(filePath)              # extract file
+    workingSheet = workingSheet.sheet_names()
+    # dataList = workingSheet.row_values(0)  # extract column names
+    dataRow ={}
+    dataModel=[]
+    for i in range(0,len(workingSheet)):
+        dataRow={'value':workingSheet[i],'label':workingSheet[i]}
+        dataModel.append(dataRow)
+        pass
+    print(dataModel)
+    return str(dataModel)
 
-# def createApp(config_object='projekt.settings'):
-#     app= Flask(__name__)
-#     app.config.from_object(config_object)
-#     return app
+
+
+
+@app.route('/sheets')
+def index():
+    xd =fetchSheets('./temp/temp.xlsx')
+    return xd 
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
