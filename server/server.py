@@ -4,7 +4,7 @@ import xlrd
 app=Flask(__name__)
 CORS(app)
 
-#function
+#temporary
 def fetchSheets(filePath):
     print(filePath)
     workingSheet = xlrd.open_workbook(filePath)              # extract file
