@@ -1,4 +1,4 @@
-from flask import Flask, app ,request
+from flask import Flask, app ,request,json
 from flask_cors import CORS
 import xlrd
 app=Flask(__name__)
@@ -13,11 +13,11 @@ def fetchSheets(filePath):
     dataRow ={}
     dataModel=[]
     for i in range(0,len(workingSheet)):
-        dataRow={'value':workingSheet[i],'label':workingSheet[i]}
+        dataRow={"value":workingSheet[i],'label':workingSheet[i]}
         dataModel.append(dataRow)
         pass
-    print(dataModel)
-    return str(dataModel)
+    print(type(dataModel))
+    return (dataModel)
 
 
 
@@ -25,7 +25,8 @@ def fetchSheets(filePath):
 @app.route('/sheets')
 def index():
     xd =fetchSheets('./temp/temp.xlsx')
-    return xd 
+    print(xd)
+    return json.dumps(xd)
 
 
 if __name__ == "__main__":

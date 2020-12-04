@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import HomePage from './components/home'
+import APP from './components/home'
 
 ReactDOM.render(
   <React.StrictMode>
-    <HomePage></HomePage>
+    <APP />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -13,7 +13,7 @@ import UploadComponent from './upload';
 // import FilterComponent from './filters';
 
 
-const HomePage = () => {
+const APP = () => {
     const [HomeModalStatus, ChangeHomeModalStatus] = useState(false);           //status for home
     const [SettingsModalStatus, ChangeSettingsModalStatus] = useState(false);   //status for settings
     const [SearchModalStatus, ChangeSearchModalStatus] = useState(false);       //status for search
@@ -22,6 +22,7 @@ const HomePage = () => {
     const [ImportModalStatus, ChangeImportModalStatus] = useState(false);       //status for upload
     const [ExportModalStatus, ChangeExportModalStatus] = useState(false);       //status for download
 
+    Modal.setAppElement('body');
 
     return (
         <div className="App">
@@ -53,7 +54,7 @@ const HomePage = () => {
                 <SearchComponent />
                 <button onClick={() => ChangeSearchModalStatus(false)}>  OFF  </button>
             </Modal>
-            <Modal isOpen={FilterModalStatus}>
+            <Modal className="container" isOpen={FilterModalStatus}>
                 <FilterComponent />
                 <button onClick={() => ChangeFilterModalStatus(false)}>  OFF  </button>
             </Modal>
@@ -74,4 +75,4 @@ const HomePage = () => {
     )
 }
 
-export default HomePage;
+export default APP;
