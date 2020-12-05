@@ -4,7 +4,7 @@ import Select from 'react-select'
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
-function SheetsComponent(props) {
+function SheetsComponent({ show, close }) {
     const [sheets, setSheets] = useState([])
     const sheetsGetter = async () => {
         axios({
@@ -20,20 +20,23 @@ function SheetsComponent(props) {
 
     // sheetsGetter()
     return (
-        <div className="container-md">
-            <h1>Select </h1>
+        <div className="container-md d-flex justify-content-center flex-column ">
+            <h1 className="text-center">Select Working Sheet </h1>
             <Select
                 onMenuOpen={sheetsGetter}
                 isSearchable={true}
                 options={sheets}
                 name="sheetName"
                 defaultOptions={true}
+                className="m-3"
             />
-            <button className="btn-success">Submit</button>
-            {/* <h1>{sheets}</h1> */}
+            <div className="d-flex flex-end justify-content-end">
+                <button className="btn-success m-1 btn-lg btn ">Submit</button>
+                <button className="btn-danger m-1 btn-lg btn mr-3 " onClick={() => { close(false) }}>  OFF  </button>
+            </div>
+
 
         </div>
-
     )
 }
 

@@ -21,6 +21,7 @@ const APP = () => {
     const [SheetModalStatus, ChangeSheetModalStatus] = useState(false);         //status for sheets
     const [ImportModalStatus, ChangeImportModalStatus] = useState(false);       //status for upload
     const [ExportModalStatus, ChangeExportModalStatus] = useState(false);       //status for download
+    //closing modals
 
     Modal.setAppElement('body');
 
@@ -46,6 +47,7 @@ const APP = () => {
                 <FilterComponent />
                 <button onClick={() => ChangeFilterModalStatus(false)}>  OFF  </button>
             </Modal> */}
+            <SheetsComponent />
             <Modal isOpen={SettingsModalStatus}>
                 <SettingsComponent />
                 <button onClick={() => ChangeSettingsModalStatus(false)}>   </button>
@@ -54,13 +56,13 @@ const APP = () => {
                 <SearchComponent />
                 <button onClick={() => ChangeSearchModalStatus(false)}>  OFF  </button>
             </Modal>
-            <Modal className="container" isOpen={FilterModalStatus}>
+            <Modal isOpen={FilterModalStatus}>
                 <FilterComponent />
                 <button onClick={() => ChangeFilterModalStatus(false)}>  OFF  </button>
             </Modal>
-            <Modal isOpen={SheetModalStatus}>
-                <SheetsComponent />
-                <button onClick={() => ChangeSheetModalStatus(false)}>  OFF  </button>
+            //sheet component
+            <Modal portalClassName='modalClass' isOpen={SheetModalStatus}>
+                <SheetsComponent close={ChangeSheetModalStatus} />
             </Modal>
             <Modal isOpen={ImportModalStatus}>
                 < UploadComponent />
