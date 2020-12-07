@@ -1,5 +1,6 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import MTable from 'material-table'
+import ReactAsyncTable from 'react-async-table';
 import axios from 'axios'
 
 
@@ -8,7 +9,7 @@ import axios from 'axios'
 const Table = () => {
     const [dataFromSvr, setData] = useState([])
     const [columns, setcolumns] = useState([])
-
+    // Podobnie do metod componentDidMount i componentDidUpdate:
 
     const dataFetch = async () => {
         axios({
@@ -29,40 +30,33 @@ const Table = () => {
         console.log(columns)
         for (let i = 0; i < columns.length; i++) {
             newColumns.push({
-                'title': columns[i],
-                'field': columns[i]
+                // 'title': columns[i],
+                // 'field': columns[i]
+                'dataField': columns[i],
+                'text': columns[i]
             })
         }
 
         setcolumns(newColumns)
     }
-
+    useEffect(() => {
+        dataFetch()
+        return () => {
+            console.log("cleaned up");
+        };
+    }, []);
 
     return (
-        <MTable
-            data={query =>
-                new Promise((resolve, reject) => {
-                    axios({
-                        method: "get",
-                        url: "http://localhost:5000/temporary",
-                    })
-                        .then((res) => {
-                            setData(res.data)
-                            columnMaker(res.data)
-                            console.log(res.data)
-                            resolve({
-                                data: res.data,
-                                page: res.data.page - 1,
-                                totalCount: res.data.length,
-                                emptyRowsWhenPaging: true,   //to make page size fix in case of less data rows
-                            })
-                        })
-                })
-            }
+     
+        < ReactAsyncTable
+            onLoad={dataFetch}
+            items={dataFromSvr}
+            keyField="id"
             columns={columns}
-            options={{
-                exportButton: true
-            }}
+            query={''}
+            currentPage={1}
+            itemsPerPage={10}
+            totalItems={dataFromSvr.length}
         />
     )
 }
