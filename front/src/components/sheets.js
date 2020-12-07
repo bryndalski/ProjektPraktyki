@@ -13,12 +13,19 @@ function SheetsComponent({ show, close }) {
         })
             .then((res) => {
                 setSheets(res.data)
-                console.log(sheets)
             })
+    }
+    const sheetToSend = () => {
+        axios({
+            method: "post",
+            url: "http://localhost:5000/fetchSheet",
+            data: {
+
+            }
+        })
     }
 
 
-    // sheetsGetter()
     return (
         <div className="container-md d-flex justify-content-center flex-column ">
             <h1 className="text-center">Select Working Sheet </h1>
@@ -32,7 +39,7 @@ function SheetsComponent({ show, close }) {
             />
             <div className="d-flex flex-end justify-content-end">
                 <button className="btn-success m-1 btn-lg btn ">Submit</button>
-                <button className="btn-danger m-1 btn-lg btn mr-3 " onClick={() => { close(false) }}>  OFF  </button>
+                <button className="btn-danger m-1 btn-lg btn mr-3 " onClick={() => { close(false) }}>  CANCEL   </button>
             </div>
 
 

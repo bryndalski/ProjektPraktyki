@@ -39,6 +39,5 @@ def rowToJSON(filePath, sheetName):
 
         dataToSend.append(singleRow)
     pass
-    # print(str(dataToSend))
+    print(str(dataToSend))
     return
-fetchModel('../temp/temp.xlsx','TG')
