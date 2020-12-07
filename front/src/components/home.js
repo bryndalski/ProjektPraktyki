@@ -52,7 +52,7 @@ const APP = () => {
 
 
             <div className="tableContainer">
-                <Table />
+                <Table className="table" />
             </div>
 
 

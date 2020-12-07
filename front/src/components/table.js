@@ -1,13 +1,12 @@
 import { React, useState } from 'react';
 import MTable from 'material-table'
 import axios from 'axios'
-import { red } from '@material-ui/core/colors';
 
 
 
 
 const Table = () => {
-    const [data, setData] = useState([])
+    const [dataFromSvr, setData] = useState([])
     const [columns, setcolumns] = useState([])
 
 
@@ -42,18 +41,29 @@ const Table = () => {
     return (
         <MTable
             data={query =>
-                new Promise((resolve) => {
-                    dataFetch()
-                    resolve({
-                        data: data,
-                        page: data.length - 1,
-                        totalCount: data.length,
+                new Promise((resolve, reject) => {
+                    axios({
+                        method: "get",
+                        url: "http://localhost:5000/temporary",
                     })
+                        .then((res) => {
+                            setData(res.data)
+                            columnMaker(res.data)
+                            console.log(res.data)
+                            resolve({
+                                data: res.data,
+                                page: res.data.page - 1,
+                                totalCount: res.data.length,
+                                emptyRowsWhenPaging: true,   //to make page size fix in case of less data rows
+                            })
+                        })
                 })
             }
-            // data={data}
             columns={columns}
-        ></MTable>
+            options={{
+                exportButton: true
+            }}
+        />
     )
 }
 export default Table;
