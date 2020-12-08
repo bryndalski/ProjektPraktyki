@@ -5,19 +5,23 @@ import axios from 'axios'
 
 
 
-const Table = () => {
+const Table = ({ sheetToImport }) => {
     //hooks for table
+    const [SelectedSheet, setSelectedSheet] = useState(sheetToImport)
     const [loading, setLoading] = useState(true)
-
+    console.log(sheetToImport)
+    //for data
     const [dataFromSvr, setData] = useState([])
     const [columns, setcolumns] = useState([])
 
-
-
+    //network
     const dataFetch = async () => {
         axios({
-            method: "get",
-            url: "http://localhost:5000/temporary",
+            method: "POST",
+            url: "http://localhost:5000/fetchColumn",
+            data: {
+                sheet: sheetToImport,
+            }
         })
             .then((res) => {
                 setData(res.data)
@@ -25,7 +29,6 @@ const Table = () => {
                 setLoading(false)
             })
     }
-
     const columnMaker = async (data2) => {
         let newColumns = []
         console.log(data2)
@@ -40,50 +43,48 @@ const Table = () => {
 
         setcolumns(newColumns)
     }
+
+    // other
+    useEffect(() => {
+        if (SelectedSheet !== sheetToImport) {
+            setSelectedSheet(sheetToImport)
+            dataFetch()
+        }
+    })
+
     useEffect(() => {
         dataFetch()
-        return () => {
-            console.log("cleaned up");
-        };
+        return () => { };
     }, []);
 
+
+
     return (
-
         < ReactAsyncTable
-
-
-
             onLoad={dataFetch}
             items={dataFromSvr}
             isLoading={loading}
-            keyField="id"
+            // keyField="id"
+            // activeTabID=""
             columns={columns}
             currentPage={0}
             itemsPerPage={0}
             tableHeaderClass='tableHeader'
             tableClass='tableBody'
             totalItems={dataFromSvr.length}
-
             options={{
-                // searchBox: true,
+                searchBox: false,
+                insertButton: false,
                 // multipleSelect: true,
-                // actionsColumn: true,
-                // pagination: true
+                expandable: false,
+                actionsColumn: true,
+                pagination: false
             }}
             translations={{
-                searchPlaceholder: 'Search...',
-                addButton: 'Add',
-                deleteButton: 'Delete',
-                listViewTitle: "List View",
-                gridViewTitle: "Grid View",
-                sortTitle: 'Sort',
                 actionsColumnTitle: 'Actions',
                 editAction: 'Edit',
                 deleteAction: 'Delete',
-                noDataText: 'No data found',
-                requestFailedText: 'API request failed',
-                paginationFirst: 'First',
-                paginationLast: 'Last'
+
             }}
         />
     )

@@ -14,8 +14,6 @@ import SearchComponent from './search';
 import SheetsComponent from './sheets';
 import DownloadComponent from './download';
 import UploadComponent from './upload';
-import { Tab } from '@material-ui/core';
-// import FilterComponent from './filters';
 
 
 const APP = () => {
@@ -29,6 +27,7 @@ const APP = () => {
     const [ExportModalStatus, ChangeExportModalStatus] = useState(false);       //status for download
     //closing modals
     //------------------------------DATA HOOKS------------------------------
+    const [Sheet, setSheet] = useState('TG')
 
     Modal.setAppElement('body');
 
@@ -52,7 +51,8 @@ const APP = () => {
 
 
             <div className="tableContainer">
-                <Table className="table" />
+                <Table className="table"
+                    sheetToImport={Sheet} />
             </div>
 
 
@@ -75,11 +75,10 @@ const APP = () => {
                 <button onClick={() => ChangeFilterModalStatus(false)}>  OFF  </button>
             </Modal>
             <Modal isOpen={SheetModalStatus}>
-                <SheetsComponent close={ChangeSheetModalStatus} />
+                <SheetsComponent sheetValue={Sheet} sheet={setSheet} close={ChangeSheetModalStatus} />
             </Modal>
             <Modal isOpen={ImportModalStatus}>
-                < UploadComponent />
-                <button onClick={() => ChangeImportModalStatus(false)}>  OFF  </button>
+                < UploadComponent close={ChangeImportModalStatus} />
             </Modal>
             <Modal isOpen={ExportModalStatus}>
                 <DownloadComponent />

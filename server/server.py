@@ -48,8 +48,6 @@ def rowToJSON(filePath, sheetName):
 
             pass
         singleRow = dict(zip(dataModel, workingRow))
-        singleRow.update({"sheetGrop": sheetName})
-
         dataToSend.append(singleRow)
     pass
     print (str(dataToSend))
@@ -68,11 +66,14 @@ def index():
     return json.dumps(xd)
 
 
-@app.route('/temporary')
-def index_one():
-    beforeJson = rowToJSON('./temp/temp.xlsx','TG')
-    print("temporary")
+@app.route('/fetchColumn', methods=['POST'])
+def fetchColumn():
+    # print("temporary")
+    data = request.json
+    print(data['sheet'])
+    beforeJson = rowToJSON('./temp/temp.xlsx',data['sheet'])
     return json.dumps(beforeJson)
+    return request.json
 
 if __name__ == "__main__":
     app.run(debug=True)
