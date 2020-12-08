@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from 'react';
-import MTable from 'material-table'
 import ReactAsyncTable from 'react-async-table';
 import axios from 'axios'
 
@@ -7,9 +6,13 @@ import axios from 'axios'
 
 
 const Table = () => {
+    //hooks for table
+    const [loading, setLoading] = useState(true)
+
     const [dataFromSvr, setData] = useState([])
     const [columns, setcolumns] = useState([])
-    // Podobnie do metod componentDidMount i componentDidUpdate:
+
+
 
     const dataFetch = async () => {
         axios({
@@ -19,7 +22,7 @@ const Table = () => {
             .then((res) => {
                 setData(res.data)
                 columnMaker(res.data)
-                return res.data
+                setLoading(false)
             })
     }
 
@@ -30,8 +33,6 @@ const Table = () => {
         console.log(columns)
         for (let i = 0; i < columns.length; i++) {
             newColumns.push({
-                // 'title': columns[i],
-                // 'field': columns[i]
                 'dataField': columns[i],
                 'text': columns[i]
             })
@@ -47,16 +48,43 @@ const Table = () => {
     }, []);
 
     return (
-     
+
         < ReactAsyncTable
+
+
+
             onLoad={dataFetch}
             items={dataFromSvr}
+            isLoading={loading}
             keyField="id"
             columns={columns}
-            query={''}
-            currentPage={1}
-            itemsPerPage={10}
+            currentPage={0}
+            itemsPerPage={0}
+            tableHeaderClass='tableHeader'
+            tableClass='tableBody'
             totalItems={dataFromSvr.length}
+
+            options={{
+                // searchBox: true,
+                // multipleSelect: true,
+                // actionsColumn: true,
+                // pagination: true
+            }}
+            translations={{
+                searchPlaceholder: 'Search...',
+                addButton: 'Add',
+                deleteButton: 'Delete',
+                listViewTitle: "List View",
+                gridViewTitle: "Grid View",
+                sortTitle: 'Sort',
+                actionsColumnTitle: 'Actions',
+                editAction: 'Edit',
+                deleteAction: 'Delete',
+                noDataText: 'No data found',
+                requestFailedText: 'API request failed',
+                paginationFirst: 'First',
+                paginationLast: 'Last'
+            }}
         />
     )
 }
