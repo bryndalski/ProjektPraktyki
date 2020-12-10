@@ -1,19 +1,67 @@
-import React from 'react'
 import "bootstrap/dist/css/bootstrap.min.css";
-function UploadComponent({ close }) {
+import SweetAlert from 'sweetalert2';
+import axios from 'axios'
 
-    return (
-        <div className="container-md d-flex justify-content-center flex-column ">
-            <h1>Upload file</h1>
-            <span>Your file needs to be saved as XLSX</span>
-            <input type="file" className="form-control" />
-            <button className="btn-success m-1 btn-lg btn " onClick={() => {
-                close(false)
-            }}>UPLOAD</button>
-            <button className="btn-danger m-1 btn-lg btn mr-3 " onClick={() => { close(false) }}>  CANCEL   </button>
 
-        </div>
-    )
+
+export const uploadAlert = async () => {
+    const { value: file } = await SweetAlert.fire({
+        title: 'Upload file',
+        text: "your file needs to be saved as XLSX",
+        input: 'file',
+        inputAttributes: {
+            'accept': '.xlsx',
+            'aria-label': 'Upload your file'
+        }
+    })
+    if (file) {
+        if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+            try {
+                let data = new FormData()
+                data.append('file', file)
+                axios({
+                    method: "POST",
+                    url: "http://localhost:5000/fileImport",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        'Content-Type': 'multipart/form-data'
+
+                    },
+                    data: data
+                }).catch((err) => {
+                    return SweetAlert.fire({
+                        title: "Ooops",
+                        text: "unexpected error occurred while uploading your file",
+                        icon: 'error',
+
+                    })
+                })
+                    .then((res) => {
+                        if (res.data !== undefined && res.data.success) {
+                            SweetAlert.fire({
+                                title: res.data.message,
+                                icon: 'success',
+
+                            })
+                        }
+                    })
+            } catch (error) {
+                SweetAlert.fire({
+                    title: "Ooops",
+                    text: "unexpected error occurred while uploading your file",
+                    icon: 'error',
+
+                })
+            }
+
+        } else {
+            SweetAlert.fire({
+                title: "Wrong file type",
+                text: "Please upload only XLSX",
+                icon: 'error',
+
+            })
+        }
+    }
 }
 
-export default UploadComponent;

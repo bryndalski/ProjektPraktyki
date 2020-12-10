@@ -1,8 +1,18 @@
 from flask import Flask, app ,request,json
 from flask_cors import CORS
 import xlrd
+import os 
+from werkzeug.utils import secure_filename
+
 app=Flask(__name__)
 CORS(app)
+
+path = os.getcwd()
+UPLOAD_FOLDER = os.path.join(path, 'temp')
+app.config['./temp'] = UPLOAD_FOLDER
+
+
+
 
 #--------------------------------temporary-------------------------------------------------------------
 def fetchSheets(filePath):
@@ -48,6 +58,7 @@ def rowToJSON(filePath, sheetName):
 
             pass
         singleRow = dict(zip(dataModel, workingRow))
+        singleRow.update({"id": row})
         dataToSend.append(singleRow)
     pass
     print (str(dataToSend))
@@ -75,5 +86,15 @@ def fetchColumn():
     return json.dumps(beforeJson)
     return request.json
 
+
+
+@app.route('/fileImport', methods=['POST'])
+def fileImport():
+    try:
+        file=request.files['file']
+        file.save(os.path.join('./temp','temp.xlsx'))
+        return ({'message':"Sucessfull upload","success":"true"})
+    except:
+        return({'message':"Something went wrong :(","success":"false"})
 if __name__ == "__main__":
     app.run(debug=True)

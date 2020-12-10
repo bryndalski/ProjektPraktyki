@@ -11,35 +11,29 @@ function SheetsComponent({ sheet, close, sheetValue }) {
         axios({
             method: "get",
             url: "http://localhost:5000/sheets",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
+
         })
             .then((res) => {
                 setSheets(res.data)
             })
     }
     return (
-        <div className="container-md d-flex justify-content-center flex-column ">
-            <h1 className="text-center">Select Working Sheet </h1>
-            <Select
-                defaultInputValue={sheetValue}
-                // value={sheetValue}
-                onMenuOpen={sheetsGetter}
-                isSearchable={true}
-                options={sheets}
-                name="sheetName"
-                defaultOptions={true}
-                className="m-3"
-                onChange={e => { setSheetInSelect(e.value) }}
-            />
-            <div className="d-flex flex-end justify-content-end">
-                <button className="btn-success m-1 btn-lg btn " onClick={() => {
-                    close(false)
-                    sheet(SheetInSelect)
-                }}>Submit</button>
-                <button className="btn-danger m-1 btn-lg btn mr-3 " onClick={() => { close(false) }}>  CANCEL   </button>
-            </div>
+
+        <Select
+            placeholder="select sheet"
+            onMenuOpen={sheetsGetter}
+            isSearchable={true}
+            options={sheets}
+            name="sheetName"
+            defaultOptions={true}
+            className="w-25 m-2"
+            onChange={e => { sheet(e.value) }}
+        />
 
 
-        </div>
     )
 }
 

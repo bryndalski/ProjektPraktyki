@@ -1,30 +1,26 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 .navigatorSide {
-  width: 50px;
-  height: 100vh;
   align-items: center;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+}
+.navigatorSide .end {
+  align-items: baseline;
 }
 .navigatorSide i {
+  margin-left: 10px;
+  margin-right: 10px;
   color: #727272;
-  margin: 10px;
-  height: 50px;
   font-size: 25pt;
   transition: all ease-in-out 0.1s;
 }
 .navigatorSide i:hover {
   color: white;
   cursor: pointer;
-  font-size: 30pt;
-}
-.navigatorSide .separator {
-  background-color: #727272;
-  width: 90%;
-  height: 2px;
 }
 
 .tableContainer {
-  width: calc(100% - 50px);
-  height: 100vh !important;
   max-height: 100vh !important;
   overflow: scroll !important;
 }
@@ -68,4 +64,11 @@
   position: sticky;
   top: 0;
   background-color: #9e9e9e;
+}
+
+.animated .fadeIn {
+  height: 100vh !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
