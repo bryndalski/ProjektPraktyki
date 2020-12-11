@@ -29,7 +29,7 @@ function SheetsComponent({ sheet, close, sheetValue }) {
             options={sheets}
             name="sheetName"
             defaultOptions={true}
-            className="w-25 m-2"
+            className="SheetSelect m-2"
             onChange={e => { sheet(e.value) }}
         />
 

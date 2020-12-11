@@ -8,10 +8,12 @@ import "../styles/home.css";//css
 import Table from './table'
 //modals
 import FilterComponent from './filters';
-import SearchComponent from './search';
 import SheetsComponent from './sheets';
+import SearchInput from './search';
+
 import { uploadAlert } from './upload';
 import { addRecord } from './addRecord'
+import { Tab } from 'bootstrap';
 //TEST
 
 // addRecord(Columns)
@@ -19,8 +21,9 @@ import { addRecord } from './addRecord'
 const APP = () => {
     //modals hooks
     const [Columns, setColumns] = useState([])
-    const [SearchModalStatus, ChangeSearchModalStatus] = useState(false);       //status for search
+    const [SearchModalStatus, ChangeSearchModalStatus] = useState('');       //status for search
     const [FilterModalStatus, ChangeFilterModalStatus] = useState(false);       //status for filter
+
     //closing modals
     //------------------------------DATA HOOKS------------------------------
     const [Sheet, setSheet] = useState('TG')
@@ -28,50 +31,29 @@ const APP = () => {
     Modal.setAppElement('body');
 
     return (
-        <div >
-            <div className='navigatorSide   bg-dark d-flex flex-row  align-baseline justify-content-between'>
-                <SheetsComponent sheetValue={Sheet} sheet={setSheet} />
-                <div className="m-2">
-                    <i title="Search" onClick={() => ChangeSearchModalStatus(true)} className="fa fa-search"></i>
-                    <i title="Filters" onClick={() => ChangeFilterModalStatus(true)} className="fa fa-filter"></i>
-                    <i title="Add Record" onClick={() => { addRecord({ Columns }) }} className="fa fa-plus"></i>
-                    <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
-                    <i title="Download sheet" onClick={() => uploadAlert()} className="fa fa-download"></i>
-                    {/* <i title="Download sheet" onClick={() => sweet_alert()} className="fa fa-download"></i> */}
+        <div className="wholePage d-flex flex-column" >
+            <nav className="navbar navigatorSide navbar-expand-lg navbar-dark bg-dark">
+                <button className="navbar-toggler ml-2" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse toogleBar" id="navbarTogglerDemo01">
+                    <SheetsComponent sheetValue={Sheet} sheet={setSheet} />
+                    <SearchInput changeSearch={ChangeSearchModalStatus} />
+                    <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
+                        <i title="Filters" onClick={() => ChangeFilterModalStatus(true)} className="fa fa-filter"></i>
+                        <i title="Add Record" onClick={() => { addRecord({ Columns }) }} className="fa fa-plus"></i>
+                        <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
+                        <i title="Download sheet" onClick={() => uploadAlert()} className="fa fa-download"></i>
+                    </div>
 
                 </div>
-            </div>
+            </nav>
 
-
-
-            <div className="tableContainer">
+            <div className="tableContainer flex-grow-1">
                 <Table className="table"
-                    sheetToImport={Sheet} columnNames={setColumns} />
+                    sheetToImport={Sheet} columnNames={setColumns} search={SearchModalStatus} />
             </div>
 
-
-
-
-
-
-            {/* modals */}
-
-            {/* <SettingsComponent visibleStatus={ExportModalStatus} visibility={ChangeExportModalStatus} /> */}
-            {/* 
-            <button onClick={() => ChangeSettingsModalStatus(false)}>   </button>
-            <Modal isOpen={SearchModalStatus}>
-                <SearchComponent />
-                <button onClick={() => ChangeSearchModalStatus(false)}>  OFF  </button>
-            </Modal>
-            <Modal isOpen={FilterModalStatus}>
-                <FilterComponent />
-                <button onClick={() => ChangeFilterModalStatus(false)}>  OFF  </button>
-            </Modal> */}
-
-            {/* <Modal isOpen={ExportModalStatus}>
-                <DownloadComponent />
-                <button onClick={() => ChangeExportModalStatus(false)}>  OFF  </button>
-            </Modal> */}
         </div >
 
     )

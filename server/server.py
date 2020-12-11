@@ -96,5 +96,12 @@ def fileImport():
         return ({'message':"Sucessfull upload","success":"true"})
     except:
         return({'message':"Something went wrong :(","success":"false"})
+
+
+# @app.route('newLine',methods=['POST'])
+# def newRecord():
+
+#     return
+
 if __name__ == "__main__":
     app.run(debug=True)

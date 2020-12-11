@@ -7,7 +7,7 @@ export const addRecord = async ({ Columns }) => {
     let htmlContent = ''
     for (let i = 0; i < Columns.length; i++) {
         if (Columns[i] !== 'id')
-            htmlContent += '<label for="' + Columns[i] + '">' + Columns[i] + '</label></br >' + '<Input class="newRowInput" type="text" id="' + i + '" name="' + Columns[i] + '" /></br>'
+            htmlContent += '   <div class="form-group m-3 d-flex  flex-row">  <label class="col-sm-2 col-form-label text-wrap" for="' + Columns[i] + '">' + Columns[i] + '</label>' + '<Input class="newRowInput form-control" type="text" id="' + i + '" name="' + Columns[i] + '" /></div>'
     }
 
     await SweetAlert.fire({
@@ -22,13 +22,27 @@ export const addRecord = async ({ Columns }) => {
                 for (let i = 0; i < valueToCollect.length; i++) {
                     object[valueToCollect[i].name] = valueToCollect[i].value
                 }
-                // axios({
-                //     method: "POST",
-                //     url: "http://localhost:5000/newLine",
-                //     data: {
-                //         ...object
-                //     }
-                // })
+                axios({
+                    method: "POST",
+                    url: "http://localhost:5000/newLine",
+                    data: {
+                        ...object
+                    }
+                }).catch((err) => {
+                    return SweetAlert.fire({
+                        title: "Oops",
+                        text: "unexpected error occurred while reading your data \n Please try one more time",
+                        icon: 'error',
+                    })
+                }).then((res) => {
+                    if (res.data != undefined) {
+                        SweetAlert.fire({
+                            title: "Success",
+                            text: "Successfully added X record ",
+                            icon: 'success',
+                        })
+                    }
+                })
             }
             catch (err) {
                 return SweetAlert.fire({

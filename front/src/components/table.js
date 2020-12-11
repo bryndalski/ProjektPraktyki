@@ -6,13 +6,15 @@ import SweetAlert from 'sweetalert2';
 
 
 
-const Table = ({ sheetToImport, columnNames }) => {
+const Table = (props) => {
     //hooks for table
     const [SelectedSheet, setSelectedSheet] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [lastSearch, setlastSearch] = useState('')
     //for data
     const [dataFromSvr, setData] = useState([])
     const [columns, setcolumns] = useState([])
+    const [filteredItems, setFilteredItems] = useState([])
 
     //network
     const dataFetch = async () => {
@@ -23,7 +25,7 @@ const Table = ({ sheetToImport, columnNames }) => {
                 "Access-Control-Allow-Origin": "*",
             },
             data: {
-                sheet: sheetToImport,
+                sheet: props.sheetToImport,
             }
         }).catch((err) => {
             return SweetAlert.fire({
@@ -35,9 +37,18 @@ const Table = ({ sheetToImport, columnNames }) => {
         })
             .then((res) => {
                 if (res.data !== undefined) {
-                    setData(res.data)
-                    columnMaker(res.data)
-                    setLoading(false)
+                    if (res.data.length !== 0) {
+                        setData(res.data)
+                        columnMaker(res.data)
+                        setLoading(false)
+                    }
+                    else {
+                        return SweetAlert.fire({
+                            title: "Sorry",
+                            text: "No data was found",
+                            icon: 'error',
+                        })
+                    }
 
                 }
             })
@@ -46,7 +57,7 @@ const Table = ({ sheetToImport, columnNames }) => {
         let newColumns = []
         let columns = Object.keys(data2[0])
         console.log(columns)
-        columnNames(columns)
+        props.columnNames(columns)
 
         for (let i = 0; i < columns.length; i++) {
             newColumns.push({
@@ -66,17 +77,36 @@ const Table = ({ sheetToImport, columnNames }) => {
 
     // other
     useEffect(() => {
-        if (SelectedSheet !== sheetToImport) {
-            setSelectedSheet(sheetToImport)
+        console.log(SelectedSheet, props.sheetToImport)
+        if (SelectedSheet !== props.sheetToImport) {
+            setSelectedSheet(props.sheetToImport)
             dataFetch()
-            setSelectedSheet(sheetToImport)
+            setSelectedSheet(props.sheetToImport)
         }
+        if (props.search === '') {
+            setFilteredItems(dataFromSvr)
+        } else
+            if (lastSearch !== props.search) {
+                let filtred = dataFromSvr.filter((obj) => {
+                    var flag = false;
+                    Object.values(obj).forEach((val) => {
+                        if (String(val).indexOf(props.search) > -1) {
+                            flag = true;
+                            return;
+                        }
+                    });
+                    if (flag)
+                        return obj;
+                });
+                setFilteredItems(filtred)
+                setlastSearch(props.search)
+            }
     })
     return (
         < ReactAsyncTable
             loader={loadingMessage}
             onLoad={dataFetch}
-            items={dataFromSvr}
+            items={filteredItems}
             isLoading={loading}
             keyField="id"
             columns={columns}
@@ -95,11 +125,11 @@ const Table = ({ sheetToImport, columnNames }) => {
                 // actionsColumn: true,
                 pagination: false
             }}
-            // translations={{
-            //     actionsColumnTitle: 'Actions',
-            //     editAction: 'Edit',
-            //     deleteAction: 'Delete',
-            // }}
+            translations={{
+                actionsColumnTitle: 'Akcje',
+                editAction: 'Edit',
+                deleteAction: 'Delete',
+            }}z
             onColumnClick={(e) => {
                 console.log(e)
             }}
