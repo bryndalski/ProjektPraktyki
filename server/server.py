@@ -98,10 +98,31 @@ def fileImport():
         return({'message':"Something went wrong :(","success":"false"})
 
 
-# @app.route('newLine',methods=['POST'])
-# def newRecord():
+@app.route('/newLine',methods=['POST']) #adding row
+def newRecord():
+    try:
+        print(request.json) #CHANGE ME  na dodawanie do bazy 
+        return ({"message":"succeded","success":True})
+    except:
+        return({'message':"Something went wrong :(","success":False})
 
-#     return
+@app.route('/editRow', methods=['POST']) #edtowanie 
+def editRecord():
+    try:
+        print(request.json) #CHANGE ME  na edytowanie wiersza bazy 
+        return ({"success":True})
+    except:
+        return({"success":False})
+        
+@app.route('/deleteRow', methods=['POST']) #edtowanie 
+def deleteRecord():
+    try:
+        print(request.json) #CHANGE ME  na edytowanie wiersza bazy 
+        return ({"success":True})
+    except:
+        return({"success":False})
+        
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,23 +1,22 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-// import React, { Input } from 'react'
 import SweetAlert from 'sweetalert2';
 import axios from 'axios'
 
-export const addRecord = async ({ Columns }) => {
+export const addRecord = async (Columns, sheet) => {
     let htmlContent = ''
     for (let i = 0; i < Columns.length; i++) {
         if (Columns[i] !== 'id')
-            htmlContent += '   <div class="form-group m-3 d-flex  flex-row">  <label class="col-sm-2 col-form-label text-wrap" for="' + Columns[i] + '">' + Columns[i] + '</label>' + '<Input class="newRowInput form-control" type="text" id="' + i + '" name="' + Columns[i] + '" /></div>'
+            htmlContent += `<div class="form-group m-3 d-flex  flex-row">  <label class="d-inline-block mr-auto w-50  col-form-label"  for="$Columns[i]">${Columns[i]}</label><Input class="newRowInput w-50 ml-autow form-control" type="text" id="${i}" name="${Columns[i]}" required/></div>`
     }
 
     await SweetAlert.fire({
+        showCancelButton: true,
         title: "Add record",
         html: htmlContent,
-        customClass: "formRecord",
         preConfirm: () => {
             try {
-                Columns = Columns.pop()
                 let object = {}
+                Columns = Columns.pop()
                 let valueToCollect = document.querySelectorAll('.newRowInput')
                 for (let i = 0; i < valueToCollect.length; i++) {
                     object[valueToCollect[i].name] = valueToCollect[i].value
@@ -25,24 +24,44 @@ export const addRecord = async ({ Columns }) => {
                 axios({
                     method: "POST",
                     url: "http://localhost:5000/newLine",
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                    },
                     data: {
-                        ...object
-                    }
+                        ...object,
+                        sheet: sheet
+                    },
                 }).catch((err) => {
                     return SweetAlert.fire({
                         title: "Oops",
                         text: "unexpected error occurred while reading your data \n Please try one more time",
                         icon: 'error',
                     })
-                }).then((res) => {
-                    if (res.data != undefined) {
-                        SweetAlert.fire({
-                            title: "Success",
-                            text: "Successfully added X record ",
-                            icon: 'success',
-                        })
-                    }
                 })
+                    .then((res) => {
+                        console.log(res)
+                        if (res.data !== undefined) {
+                            if (res.data.success)
+                                SweetAlert.fire({
+                                    title: "Success",
+                                    text: "Record successfully added  ",
+                                    icon: 'success',
+                                })
+
+                            else
+                                SweetAlert.fire({
+                                    title: "Error",
+                                    text: "unexpected error occurred while adding your data \n Please try one more time",
+                                    icon: 'error',
+                                })
+                        } else {
+                            SweetAlert.fire({
+                                title: "Error",
+                                text: "unexpected error occurred while adding your data \n Please try one more time",
+                                icon: 'error',
+                            })
+                        }
+                    })
             }
             catch (err) {
                 return SweetAlert.fire({

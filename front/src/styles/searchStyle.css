@@ -10,8 +10,10 @@
 }
 .SheetSelect .customTextInput:focus {
   box-shadow: none !important;
+  outline: none !important;
+  border-right-color: white !important;
   border: solid 2px #2684ff !important;
-  border-right: 0px !important;
+  border-right: 0px white !important;
 }
 .SheetSelect .customTextInput:focus + .colorChange span {
   box-shadow: none !important;

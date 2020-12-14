@@ -7,14 +7,14 @@ import "../styles/searchStyle.css";//css
 const SearchInput = (props) => {
     const [InputValue, setInputValue] = useState('')
     return (
-        <div class="input-group SheetSelect csText  m-2">
+        <div className="input-group SheetSelect csText  m-2">
             <input type="text"
                 className="form-control customTextInput"
                 placeholder="Search..."
                 onChange={(e) => { setInputValue(e.target.value) }}
             />
             <div className="input-group-apend colorChange">
-                <span class="input-group-text cstomInputText fa fa-search" onClick={() => { props.changeSearch(InputValue) }} />
+                <span className="input-group-text cstomInputText fa fa-search" onClick={() => { props.changeSearch(InputValue) }} />
             </div>
         </div>
     )

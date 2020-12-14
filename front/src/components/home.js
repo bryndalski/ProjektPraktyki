@@ -6,14 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //css
 import "../styles/home.css";//css
 //other 
 import Table from './table'
-//modals
-import FilterComponent from './filters';
 import SheetsComponent from './sheets';
 import SearchInput from './search';
-
 import { uploadAlert } from './upload';
 import { addRecord } from './addRecord'
-import { Tab } from 'bootstrap';
 //TEST
 
 // addRecord(Columns)
@@ -40,8 +36,7 @@ const APP = () => {
                     <SheetsComponent sheetValue={Sheet} sheet={setSheet} />
                     <SearchInput changeSearch={ChangeSearchModalStatus} />
                     <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
-                        <i title="Filters" onClick={() => ChangeFilterModalStatus(true)} className="fa fa-filter"></i>
-                        <i title="Add Record" onClick={() => { addRecord({ Columns }) }} className="fa fa-plus"></i>
+                        <i title="Add Record" onClick={() => { addRecord(Columns, Sheet) }} className="fa fa-plus"></i>
                         <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
                         <i title="Download sheet" onClick={() => uploadAlert()} className="fa fa-download"></i>
                     </div>

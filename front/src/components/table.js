@@ -2,22 +2,21 @@ import { React, useState, useEffect } from 'react';
 import ReactAsyncTable from 'react-async-table';
 import axios from 'axios'
 import SweetAlert from 'sweetalert2';
-
-
+import editAlert from './editRecord'
+import deleteRecord from './deleteRecord'
 
 
 const Table = (props) => {
     //hooks for table
-    const [SelectedSheet, setSelectedSheet] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [lastSearch, setlastSearch] = useState('')
     //for data
     const [dataFromSvr, setData] = useState([])
     const [columns, setcolumns] = useState([])
     const [filteredItems, setFilteredItems] = useState([])
-
+    const [editTrigger, seteditTrigger] = useState(0)
     //network
     const dataFetch = async () => {
+        setLoading(true)
         axios({
             method: "POST",
             url: "http://localhost:5000/fetchColumn",
@@ -74,38 +73,49 @@ const Table = (props) => {
             </div>
         )
     }
-
-    // other
-    useEffect(() => {
-        console.log(SelectedSheet, props.sheetToImport)
-        if (SelectedSheet !== props.sheetToImport) {
-            setSelectedSheet(props.sheetToImport)
-            dataFetch()
-            setSelectedSheet(props.sheetToImport)
-        }
+    const filtring = () => {
         if (props.search === '') {
             setFilteredItems(dataFromSvr)
-        } else
-            if (lastSearch !== props.search) {
-                let filtred = dataFromSvr.filter((obj) => {
-                    var flag = false;
-                    Object.values(obj).forEach((val) => {
-                        if (String(val).indexOf(props.search) > -1) {
-                            flag = true;
-                            return;
-                        }
-                    });
-                    if (flag)
-                        return obj;
+        } else {
+            let filtred = dataFromSvr.filter((obj) => {
+                var flag = false;
+                Object.values(obj).forEach((val) => {
+
+                    if (String(val).indexOf(props.search) > -1) {
+                        flag = true;
+                        return;
+                    }
                 });
-                setFilteredItems(filtred)
-                setlastSearch(props.search)
-            }
-    })
+                if (flag)
+                    return obj;
+            });
+            setFilteredItems(filtred)
+        }
+    }
+    // other
+    useEffect(() => {
+        console.log("import")
+        dataFetch()
+        filtring()
+    }, [props.sheetToImport])
+
+    useEffect(() => {
+        console.log("edycja");
+        filtring()
+    }, [editTrigger])
+
+    useEffect(() => {
+        console.log("filtorwannie");
+        filtring()
+    }, [dataFromSvr])
+
+    useEffect(() => {
+        console.log("odświeżanie ");
+        filtring()
+    }, [props.search])
     return (
         < ReactAsyncTable
             loader={loadingMessage}
-            onLoad={dataFetch}
             items={filteredItems}
             isLoading={loading}
             keyField="id"
@@ -115,28 +125,33 @@ const Table = (props) => {
             tableHeaderClass='tableHeader'
             tableClass='tableBody'
             totalItems={dataFromSvr.length}
-
-
             options={{
                 searchBox: false,
                 insertButton: false,
                 // multipleSelect: true,
                 expandable: false,
-                // actionsColumn: true,
+                actionsColumn: true,
                 pagination: false
             }}
             translations={{
-                actionsColumnTitle: 'Akcje',
+                // actionsColumnTitle: 'Actions',
                 editAction: 'Edit',
                 deleteAction: 'Delete',
-            }}z
+            }} z
             onColumnClick={(e) => {
                 console.log(e)
             }}
+
             onEdit={(e) => {
                 console.log(e)
-            }}
+                console.log(dataFromSvr[e])
+                editAlert(dataFromSvr[(e - 1)], dataFromSvr, setData, editTrigger, seteditTrigger, props.sheetToImport)
+            }
+            }
 
+            onDelete={(e) => {
+                deleteRecord((e - 1), dataFromSvr, setData, editTrigger, seteditTrigger, props.sheetToImport)
+            }}
         />
     )
 }
