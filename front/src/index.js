@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import APP from './components/home'
-
+import { SidteRouter } from './components/routerComponent'
 ReactDOM.render(
   <React.StrictMode>
-    <APP />
+    <SidteRouter />
   </React.StrictMode>,
   document.getElementById('root')
 );
