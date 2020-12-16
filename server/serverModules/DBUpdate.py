@@ -1,5 +1,6 @@
 from serverModules.DBConnect import con
 from serverModules.excelReader import rowToJSON, fetchSheets
+import os
 x={'History': '17.01.2020 FM przysłał info z DPMA - ale sprawdziłem link i nie znalazłem tam nic ponad to, co było dostępne już poprzednio w DPMA register\\n31.01.2020 Sprawdziłem DPMA register - nic się nie zmieniło. Napisałem do D jaki jest aktualny status. Napisałem do F z prośbą o ponowne sprawdzenie, czy mamy szansę uzyskać examiner`s report.\\n31.01.2020 F odpisał, że jeśli nie mogę znaleźć dokumentów to mogę skontaktować się z firmą Adler (http://www.adler-patent.de/html/file_inspection.html), która jest blisko urzędu i może sprawę załatwic osobiście. Zadzwoniłem tam, a życzliwy człowiek, pokierował mnie przez stronę DPMA i pokazał, że wszystkie dokumenty są już dostępne. Pobrałem je i wysłałem do D z pełna informacją. Dokumenty są po niemiecku i trzeba je przetłumaczyć (przynajmniej dokument 10 będący Office Action)\\n03.02.2020 przetłumaczyłem maszynowo doc 10. Wynika z niego jednoznacznie, że ekspert DPMA zarzucił brak nowości zastrzeżenia 1, ale wskazał, że przyłaczenie do niego niektórych zastrzeżeń zależnych mogłoby uratować nowość zgłoszenia. Te informacje podsumowałem i przesłałem do D.\\n', 'ID': 'Name1', 'id': 1, 'sheet': 'History (other)'}
 def updatingByFile (file):
     cur = con.cursor()
@@ -32,6 +33,7 @@ def updatingByFile (file):
         }
 
     con.commit()
+    os.remove(file)
 
     return defInfo
 
