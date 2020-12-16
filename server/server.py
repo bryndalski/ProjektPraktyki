@@ -5,9 +5,21 @@ from serverModules.DBTables import tablesToShow
 from serverModules.DBUpdate import *
 import os
 from werkzeug.utils import secure_filename
+from flask_pymongo import PyMongo
+from pymongo import MongoClient
+import bcrypt
+
 
 app=Flask(__name__)
 CORS(app)
+
+app.config['MONGO_DBNAME'] = 'ABBDB'
+app.config['MONGO_URI'] = 'mongodb+srv://admin:JTFnA3sCD5uwp50y@abbdb.kvxcj.mongodb.net/ABBDB?retryWrites=true&w=majority'
+
+
+mongo = PyMongo(app)
+
+
 
 path = os.getcwd()
 UPLOAD_FOLDER = os.path.join(path, 'temp')
@@ -70,6 +82,49 @@ def deleteRow():
         return ({"success": True})
     except:
         return ({"success": False})
+
+#login
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    users = mongo.db.ABBDB
+    print(request.json)
+    login_user = users.find_one({'username' : request.json['username']})
+    print(login_user)
+    if login_user != None:
+        if bcrypt.hashpw(request.json['password'].encode('utf-8'), login_user['password'].encode('utf-8')) == login_user['password'].encode('utf-8'):
+            print("oj boeiidbh[webgo[webgp;ebg;oqerbrg;ber;gubwewogo[qb")
+            return ({'success':True,'user':{'username':login_user['username'],'email':login_user['email'],'permissions':login_user['permissions']}})
+        else:
+            return ({'success':False,'message':'Invalid username/password combination'})
+    else:
+        return ({'success':False,'message':'Invalid username/password combination'})
+
+@app.route('/register',methods=['POST'])
+def register():
+    try:
+        users = mongo.db.ABBDB
+        existing_user = users.find_one({'username' : request.json['username']})
+        print(existing_user)
+        if existing_user is None:
+            try:
+                hashpass = bcrypt.hashpw(request.json['password'].encode('utf-8'), bcrypt.gensalt())
+                users.insert({
+                'username' : request.json['username'],
+                'password' : hashpass.decode("utf-8"),
+                'email':request.json['email'],
+                'permissions':request.json['permissions'],
+
+                })        
+                return ({'success':True})
+            except:
+                    return({'success1':False})
+        else:
+            return({"success":False,'message':'user exisits'})
+    except:
+        return({'success2':False})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
