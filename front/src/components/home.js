@@ -18,7 +18,17 @@ const HomeComponent = () => {
     const [SearchModalStatus, ChangeSearchModalStatus] = useState('');       //status for search
     const { user, Setuser } = useContext(UserContext) //contexr
     const [Sheet, setSheet] = useState('TG')
-    console.log(user)
+    const userPermission = () => {
+        if (user.permissions === 'moderator' || user.permissions === 'admin') {
+            return (
+                <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
+                    <i title="Add Record" onClick={() => { addRecord(Columns, Sheet) }} className="fa fa-plus"></i>
+                    <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
+                    <i title="Download sheet" onClick={() => uploadAlert()} className="fa fa-download"></i>
+                </div>)
+        }
+    }
+
     return (
         <UserContext.Provider value={{ user, Setuser }} >
             <div className="wholePage d-flex flex-column" >
@@ -29,12 +39,7 @@ const HomeComponent = () => {
                     <div className="collapse navbar-collapse toogleBar" id="navbarTogglerDemo01">
                         <SheetsComponent sheetValue={Sheet} sheet={setSheet} />
                         <SearchInput changeSearch={ChangeSearchModalStatus} />
-                        <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
-                            <i title="Add Record" onClick={() => { addRecord(Columns, Sheet) }} className="fa fa-plus"></i>
-                            <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
-                            <i title="Download sheet" onClick={() => uploadAlert()} className="fa fa-download"></i>
-                        </div>
-
+                        {userPermission()}
                     </div>
                 </nav>
                 <div className="tableContainer flex-grow-1">

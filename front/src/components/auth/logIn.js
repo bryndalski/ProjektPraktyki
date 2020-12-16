@@ -56,7 +56,9 @@ const LoginComponent = () => {
                             <input type="text" className="form-control  m-2 " placeholder="Login" onChange={(e) => setLogin(e.target.value)} />
                             <input type="password" className="form-control  m-3" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                             <span >{response}</span>
-                            <button className="btn btn-info w-50 m-4" onClick={loginFunction}>Login</button>
+                            <button className="btn btn-info w-50 m-4"
+                                onClick={loginFunction}
+                            >Login</button>
                         </div>
                     </div>
                 </div>

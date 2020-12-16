@@ -1,13 +1,17 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import ReactAsyncTable from 'react-async-table';
 import axios from 'axios'
 import SweetAlert from 'sweetalert2';
 import editAlert from './editRecord'
 import deleteRecord from './deleteRecord'
+import { UserContext } from './auth/userContext'
+
 
 
 const Table = (props) => {
     //hooks for table
+    const { user, Setuser } = useContext(UserContext) //contexr
+
     const [loading, setLoading] = useState(true)
     //for data
     const [dataFromSvr, setData] = useState([])
@@ -37,6 +41,7 @@ const Table = (props) => {
             .then((res) => {
                 if (res.data !== undefined) {
                     if (res.data.length !== 0) {
+                        console.log(res.data)
                         setData(res.data)
                         columnMaker(res.data)
                         setLoading(false)
@@ -97,6 +102,7 @@ const Table = (props) => {
         console.log("import")
         dataFetch()
         filtring()
+        console.log(dataFromSvr)
     }, [props.sheetToImport])
 
     useEffect(() => {
@@ -106,6 +112,7 @@ const Table = (props) => {
 
     useEffect(() => {
         console.log("filtorwannie");
+        console.log(filteredItems)
         filtring()
     }, [dataFromSvr])
 
@@ -128,13 +135,12 @@ const Table = (props) => {
             options={{
                 searchBox: false,
                 insertButton: false,
-                // multipleSelect: true,
                 expandable: false,
-                actionsColumn: true,
+                actionsColumn: (user.permissions !== 'guest') ? true : false,
                 pagination: false
-            }}
+            }
+            }
             translations={{
-                // actionsColumnTitle: 'Actions',
                 editAction: 'Edit',
                 deleteAction: 'Delete',
             }} z
