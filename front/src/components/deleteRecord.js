@@ -1,6 +1,9 @@
 import SweetAlert from 'sweetalert2'
 import axios from 'axios'
-const deleteRecord = (index, data, setData, editTrigger, seteditTrigger, sheet) => {
+const deleteRecord = (Insertindex, data, setData, editTrigger, seteditTrigger, sheet) => {
+    let index = data.findIndex((x) => {
+        return x.id === Insertindex
+    })
     const Toast = SweetAlert.mixin({
         toast: true,
         position: 'top-end',
@@ -9,7 +12,7 @@ const deleteRecord = (index, data, setData, editTrigger, seteditTrigger, sheet) 
     })
     SweetAlert.fire({
         icon: 'warning',
-        title: `Delete row ${(index + 1)} ?`,
+        title: `Delete row ?`,
         text: "This action is permament \n Your data is going to be  deleted forever",
         showCancelButton: true,
         cancelButtonColor: "green",
@@ -26,6 +29,7 @@ const deleteRecord = (index, data, setData, editTrigger, seteditTrigger, sheet) 
                 data: {
                     ...data[index],
                     sheet: sheet,
+                    id: data[index].id
                 }
             }).catch((err) => {
                 return SweetAlert.fire({
@@ -41,7 +45,6 @@ const deleteRecord = (index, data, setData, editTrigger, seteditTrigger, sheet) 
                                 let newData = data
                                 newData.splice(index, 1)
                                 await setData(newData)
-                                console.log(newData)
                                 await await Toast.fire({
                                     icon: 'success',
                                     title: 'Row has been deleted'

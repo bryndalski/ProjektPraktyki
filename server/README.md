@@ -4,3 +4,4 @@
 used packages
 xlrd ==== reads excel 
 flask
+dnspython

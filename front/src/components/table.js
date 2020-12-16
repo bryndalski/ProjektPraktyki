@@ -41,7 +41,6 @@ const Table = (props) => {
             .then((res) => {
                 if (res.data !== undefined) {
                     if (res.data.length !== 0) {
-                        console.log(res.data)
                         setData(res.data)
                         columnMaker(res.data)
                         setLoading(false)
@@ -60,14 +59,14 @@ const Table = (props) => {
     const columnMaker = async (data2) => {
         let newColumns = []
         let columns = Object.keys(data2[0])
-        console.log(columns)
         props.columnNames(columns)
 
         for (let i = 0; i < columns.length; i++) {
-            newColumns.push({
-                'dataField': columns[i],
-                'text': columns[i]
-            })
+            if (columns[i] !== 'id')
+                newColumns.push({
+                    'dataField': columns[i],
+                    'text': columns[i],
+                })
         }
         setcolumns(newColumns)
     }
@@ -99,25 +98,19 @@ const Table = (props) => {
     }
     // other
     useEffect(() => {
-        console.log("import")
         dataFetch()
         filtring()
-        console.log(dataFromSvr)
     }, [props.sheetToImport])
 
     useEffect(() => {
-        console.log("edycja");
         filtring()
     }, [editTrigger])
 
     useEffect(() => {
-        console.log("filtorwannie");
-        console.log(filteredItems)
         filtring()
     }, [dataFromSvr])
 
     useEffect(() => {
-        console.log("odświeżanie ");
         filtring()
     }, [props.search])
     return (
@@ -137,7 +130,7 @@ const Table = (props) => {
                 insertButton: false,
                 expandable: false,
                 actionsColumn: (user.permissions !== 'guest') ? true : false,
-                pagination: false
+                pagination: false,
             }
             }
             translations={{
@@ -145,18 +138,14 @@ const Table = (props) => {
                 deleteAction: 'Delete',
             }} z
             onColumnClick={(e) => {
-                console.log(e)
             }}
 
             onEdit={(e) => {
-                console.log(e)
-                console.log(dataFromSvr[e])
-                editAlert(dataFromSvr[(e - 1)], dataFromSvr, setData, editTrigger, seteditTrigger, props.sheetToImport)
+                editAlert(e, dataFromSvr, setData, editTrigger, seteditTrigger, props.sheetToImport)
             }
             }
-
             onDelete={(e) => {
-                deleteRecord((e - 1), dataFromSvr, setData, editTrigger, seteditTrigger, props.sheetToImport)
+                deleteRecord(e, dataFromSvr, setData, editTrigger, seteditTrigger, props.sheetToImport)
             }}
         />
     )
