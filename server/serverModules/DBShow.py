@@ -6,7 +6,7 @@ def dataToShow (table):
     cur2 = con.cursor()
     valuesList = []
 
-    cur.execute('SELECT * FROM public."' + table + '"')
+    cur.execute('SELECT * FROM public."' + table + '" ORDER BY "id"')
     records = cur.fetchall()
 
     for rec in records:

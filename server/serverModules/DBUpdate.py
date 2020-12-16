@@ -1,7 +1,7 @@
 from serverModules.DBConnect import con
 from serverModules.excelReader import rowToJSON, fetchSheets
 import os
-x={'History': '17.01.2020 FM przysłał info z DPMA - ale sprawdziłem link i nie znalazłem tam nic ponad to, co było dostępne już poprzednio w DPMA register\\n31.01.2020 Sprawdziłem DPMA register - nic się nie zmieniło. Napisałem do D jaki jest aktualny status. Napisałem do F z prośbą o ponowne sprawdzenie, czy mamy szansę uzyskać examiner`s report.\\n31.01.2020 F odpisał, że jeśli nie mogę znaleźć dokumentów to mogę skontaktować się z firmą Adler (http://www.adler-patent.de/html/file_inspection.html), która jest blisko urzędu i może sprawę załatwic osobiście. Zadzwoniłem tam, a życzliwy człowiek, pokierował mnie przez stronę DPMA i pokazał, że wszystkie dokumenty są już dostępne. Pobrałem je i wysłałem do D z pełna informacją. Dokumenty są po niemiecku i trzeba je przetłumaczyć (przynajmniej dokument 10 będący Office Action)\\n03.02.2020 przetłumaczyłem maszynowo doc 10. Wynika z niego jednoznacznie, że ekspert DPMA zarzucił brak nowości zastrzeżenia 1, ale wskazał, że przyłaczenie do niego niektórych zastrzeżeń zależnych mogłoby uratować nowość zgłoszenia. Te informacje podsumowałem i przesłałem do D.\\n', 'ID': 'Name1', 'id': 1, 'sheet': 'History (other)'}
+
 def updatingByFile (file):
     cur = con.cursor()
     mySheets = fetchSheets(file)
@@ -65,8 +65,22 @@ def delete (removeInfo):
 
 def edit (editedInfo):
     cur = con.cursor()
-    sheet = removeInfo['sheet']
-    id = str(removeInfo['id'])
+    sheet = editedInfo['sheet']
+    del editedInfo['sheet']
+    id = str(editedInfo['id'])
+    del editedInfo['id']
+    edited = ''
 
-    #cur.execute('DELETE FROM "public"."' + sheet + '" WHERE "id"=' + id)
-    #con.commit()
+    for edit in editedInfo:
+        edited += '"' + edit + '" = ' + "'" + editedInfo[edit] + "', "
+    edited = edited[0:-2]
+    #print(edited)
+
+    try:
+        cur.execute('UPDATE "'+ sheet +'" SET '+ edited +'WHERE "id"='+ id)
+        con.commit()
+        return 1
+    except:
+        cur.execute('ROLLBACK')
+        con.commit()
+        return 0

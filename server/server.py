@@ -48,8 +48,8 @@ def fetchColumn():
 def fileImport():
     try:
         file=request.files['file']
-        file.save(os.path.join('./temp','temp.xlsx'))
-        updatingByFile('temp/temp.xlsx')
+        file.save(os.path.join('./temp','temp.xls'))
+        updatingByFile('temp/temp.xls')
         return ({'message':"Sucessfull upload","success":"true"})
     except:
         return({'message':"Something went wrong :(","success":"false"})
@@ -67,10 +67,11 @@ def newRecord():
 
 @app.route('/editRow', methods=['POST'])  # edtowanie
 def editRecord():
-    try:
-        print(request.json)
+    ed = request.json
+    ifSuccess = edit(ed)
+    if ifSuccess == 1:
         return ({"success": True})
-    except:
+    else:
         return ({"success": False})
 
 
@@ -78,8 +79,8 @@ def editRecord():
 def deleteRow():
     try:
         rem = request.json
-        # print(rem)
-        delete(rem) 
+        #print(rem)
+        delete(rem)
         return ({"success": True})
     except:
         return ({"success": False})
