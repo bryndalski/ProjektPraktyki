@@ -3,7 +3,14 @@ import axios from 'axios'
 
 //TODO add axios 
 const editAlert = async (row, data, setData, editTrigger, seteditTrigger, sheet) => {
-    console.log(row)
+    row = data.filter((value) => {
+        return value.id === row
+    })
+    row = row[0]
+
+    let index = data.findIndex((x) => {
+        return x.id === row.id
+    })
     const Toast = SweetAlert.mixin({
         toast: true,
         position: 'top-end',
@@ -23,13 +30,12 @@ const editAlert = async (row, data, setData, editTrigger, seteditTrigger, sheet)
         allowOutsideClick: false,
     }).then((result) => {
         if (result.isConfirmed) {
-            Columns = Columns.pop()
+            Columns = Columns.shift()
             let object = {}
             let valueToCollect = document.querySelectorAll('.newRowInput')
             for (let i = 0; i < valueToCollect.length; i++) {
                 object[valueToCollect[i].name] = valueToCollect[i].value
             }
-            console.log(object);
             //end of data collecting 
             axios({
                 method: "POST",
@@ -40,6 +46,7 @@ const editAlert = async (row, data, setData, editTrigger, seteditTrigger, sheet)
                 data: {
                     ...object,
                     sheet: sheet,
+                    id: row.id,
                 }
             }).catch((err) => {
                 SweetAlert.fire({
@@ -50,15 +57,16 @@ const editAlert = async (row, data, setData, editTrigger, seteditTrigger, sheet)
             }).then((res) => {
                 try {
                     if (res.data.success) {
-                        data[(row.id - 1)] = {
+                        data[index] = {
+                            id: row.id,
                             ...object,
-                            id: row.id
                         };
                         try {
                             new Promise(async () => {
                                 await Toast.fire({
                                     icon: 'success',
-                                    title: 'Record has been edited      '
+                                    title: 'Record has been edited',
+                                    timer: 100
                                 })
                                 await setData(data)
                                 await seteditTrigger((editTrigger + 1))

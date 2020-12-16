@@ -78,7 +78,8 @@ def editRecord():
 def deleteRow():
     try:
         rem = request.json
-        delete(rem)
+        # print(rem)
+        delete(rem) 
         return ({"success": True})
     except:
         return ({"success": False})
