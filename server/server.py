@@ -1,92 +1,23 @@
-from dns.rdatatype import NULL
 from flask import Flask, app ,request,json
 from flask_cors import CORS
-import xlrd
-import os 
-from flask_pymongo import PyMongo
-from pymongo import MongoClient
-import bcrypt
-
+from serverModules.DBShow import dataToShow
+from serverModules.DBTables import tablesToShow
+from serverModules.DBUpdate import *
+import os
 from werkzeug.utils import secure_filename
 
 app=Flask(__name__)
 CORS(app)
-
-
-app.config['MONGO_DBNAME'] = 'ABBDB'
-app.config['MONGO_URI'] = 'mongodb+srv://admin:JTFnA3sCD5uwp50y@abbdb.kvxcj.mongodb.net/ABBDB?retryWrites=true&w=majority'
-
-
-mongo = PyMongo(app)
-
 
 path = os.getcwd()
 UPLOAD_FOLDER = os.path.join(path, 'temp')
 app.config['./temp'] = UPLOAD_FOLDER
 
 
-
-
-#--------------------------------temporary-------------------------------------------------------------
-def fetchSheets(filePath):
-    print(filePath)
-    workingSheet = xlrd.open_workbook(filePath)              # extract file
-    workingSheet = workingSheet.sheet_names()
-    # dataList = workingSheet.row_values(0)  # extract column names
-    dataRow ={}
-    dataModel=[]
-    for i in range(0,len(workingSheet)):
-        dataRow={"value":workingSheet[i],'label':workingSheet[i]}
-        dataModel.append(dataRow)
-        pass
-    print(type(dataModel))
-    return (dataModel)
-
-def fetchModel(filePath, sheetName):
-    workingSheet = xlrd.open_workbook(filePath)              # extract file
-    workingSheet = workingSheet.sheet_by_name(sheetName)
-    dataList = workingSheet.row_values(0)  # extract column names
-    dataModel = dict.fromkeys(dataList, '')
-    return dataModel
-
-
-def rowToJSON(filePath, sheetName):
-    dataModel = fetchModel(filePath, sheetName)
-    dataToSend = []
-    workingSheet = xlrd.open_workbook(filePath)  # extract file
-    sheetDatamode = workingSheet.datemode
-    workingSheet = workingSheet.sheet_by_name(sheetName)
-    for row in range(1, workingSheet.nrows):  # workingSheet.nrows
-        workingRow = []
-        for cell in range(0, workingSheet.ncols):
-            if workingSheet.cell(row, cell).ctype == 3:
-                y, m, d, mn, sec, hr = xlrd.xldate_as_tuple(
-                    workingSheet.cell(row, cell).value, sheetDatamode)
-                workingRow.append("{2}.{1}.{0}".format(y, m, d))
-                pass
-            else:
-                workingCell = workingSheet.cell(row, cell)
-                workingRow.append(str(workingCell.value))
-                pass
-
-            pass
-        singleRow = dict(zip(dataModel, workingRow))
-        singleRow.update({"id": row})
-        dataToSend.append(singleRow)
-    pass
-    print (str(dataToSend))
-    return dataToSend
-
-
-
-
-#---------------------------------end of temporary-------------------------------------------------------
-
-
 @app.route('/sheets')
 def index():
-    xd =fetchSheets('./temp/temp.xlsx')
-    print(xd)
+    xd = tablesToShow()
+    #print(xd)
     return json.dumps(xd)
 
 
@@ -94,11 +25,11 @@ def index():
 def fetchColumn():
     # print("temporary")
     data = request.json
-    print(data['sheet'])
-    beforeJson = rowToJSON('./temp/temp.xlsx',data['sheet'])
-    return json.dumps(beforeJson)
+    #print(data['sheet'])
+    beforeJson = dataToShow(data['sheet'])
+    #print(json.dumps(beforeJson))
+    return json.dumps(beforeJson,sort_keys=False)
     return request.json
-
 
 
 @app.route('/fileImport', methods=['POST'])
@@ -106,75 +37,39 @@ def fileImport():
     try:
         file=request.files['file']
         file.save(os.path.join('./temp','temp.xlsx'))
+        updatingByFile('temp/temp.xlsx')
         return ({'message':"Sucessfull upload","success":"true"})
     except:
         return({'message':"Something went wrong :(","success":"false"})
 
 
-@app.route('/newLine',methods=['POST']) #adding row
+@app.route('/newLine', methods=['POST'])  # adding row
 def newRecord():
-    try:
-        print(request.json) #CHANGE ME  na dodawanie do bazy 
-        return ({"message":"succeded","success":True})
-    except:
-        return({'message':"Something went wrong :(","success":False})
+    add = request.json
+    ifSuccess = updatingOneLine(add)
+    if ifSuccess == 1:
+        return ({"message": "succeded", "success": True})
+    else:
+        return ({'message': "Something went wrong :(", "success": False})
 
-@app.route('/editRow', methods=['POST']) #edtowanie 
+
+@app.route('/editRow', methods=['POST'])  # edtowanie
 def editRecord():
     try:
-        print(request.json) #CHANGE ME  na edytowanie wiersza bazy 
-        return ({"success":True})
+        print(request.json)
+        return ({"success": True})
     except:
-        return({"success":False})
-        
-@app.route('/deleteRow', methods=['POST']) #edtowanie 
-def deleteRecord():
+        return ({"success": False})
+
+
+@app.route('/deleteRow', methods=['POST'])  # edtowanie
+def deleteRow():
     try:
-        print(request.json) #CHANGE ME  na edytowanie wiersza bazy 
-        return ({"success":True})
+        rem = request.json
+        delete(rem)
+        return ({"success": True})
     except:
-        return({"success":False})
-        
-########-------------------LOGIN-------------------#############
-@app.route('/login', methods=['POST'])
-def login():
-    users = mongo.db.ABBDB
-    print(request.json)
-    login_user = users.find_one({'username' : request.json['username']})
-    print(login_user)
-    if login_user != None:
-        if bcrypt.hashpw(request.json['password'].encode('utf-8'), login_user['password'].encode('utf-8')) == login_user['password'].encode('utf-8'):
-            print("oj boeiidbh[webgo[webgp;ebg;oqerbrg;ber;gubwewogo[qb")
-            return ({'success':True,'user':{'username':login_user['username'],'email':login_user['email'],'permissions':login_user['permissions']}})
-        else:
-            return ({'success':False,'message':'Invalid username/password combination'})
-    else:
-        return ({'success':False,'message':'Invalid username/password combination'})
-
-@app.route('/register',methods=['POST'])
-def register():
-    try:
-        users = mongo.db.ABBDB
-        existing_user = users.find_one({'username' : request.json['username']})
-        print(existing_user)
-        if existing_user is None:
-            try:
-                hashpass = bcrypt.hashpw(request.json['password'].encode('utf-8'), bcrypt.gensalt())
-                users.insert({
-                'username' : request.json['username'],
-                'password' : hashpass.decode("utf-8"),
-                'email':request.json['email'],
-                'permissions':request.json['permissions'],
-
-                })        
-                return ({'success':True})
-            except:
-                    return({'success1':False})
-        else:
-            return({"success":False,'message':'user exisits'})
-    except:
-        return({'success2':False})
-
+        return ({"success": False})
 
 if __name__ == "__main__":
     app.run(debug=True)

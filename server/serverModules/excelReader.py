@@ -5,11 +5,29 @@ import os
 # @desc
 #
 
+def fetchSheets(filePath):
+    #print(filePath)
+    workingSheet = xlrd.open_workbook(filePath)              # extract file
+    workingSheet = workingSheet.sheet_names()
+    # dataList = workingSheet.row_values(0)  # extract column names
+    dataRow ={}
+    dataModel=[]
+    for i in range(0,len(workingSheet)):
+        dataRow={"value":workingSheet[i],'label':workingSheet[i]}
+        dataModel.append(dataRow)
+        pass
+    #print(type(dataModel))
+    return (dataModel)
 
 def fetchModel(filePath, sheetName):
     workingSheet = xlrd.open_workbook(filePath)              # extract file
     workingSheet = workingSheet.sheet_by_name(sheetName)
     dataList = workingSheet.row_values(0)  # extract column names
+    i = 0
+    for d in dataList:
+        if len(d) == 1:
+            del list[i]
+        i += 1
     dataModel = dict.fromkeys(dataList, '')
     return dataModel
 
@@ -35,9 +53,8 @@ def rowToJSON(filePath, sheetName):
 
             pass
         singleRow = dict(zip(dataModel, workingRow))
-        singleRow.update({"sheetGrop": sheetName})
 
         dataToSend.append(singleRow)
     pass
-    print(str(dataToSend))
-    return
+    #print(str(dataToSend))
+    return dataToSend
