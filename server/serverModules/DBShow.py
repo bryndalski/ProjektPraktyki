@@ -1,5 +1,5 @@
 from serverModules.DBConnect import con
-from serverModules.rememberColumns import object
+from serverModules.DBColumns import readColumns
 
 def dataToShow (table):
     cur = con.cursor()
@@ -11,7 +11,7 @@ def dataToShow (table):
 
     for rec in records:
         valuesObject = {}
-        columns = object[table]
+        columns = readColumns(table)
         i = 0
         for col in columns:
             checkValue = str(rec[i])

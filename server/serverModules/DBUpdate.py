@@ -2,6 +2,8 @@ from serverModules.DBConnect import con
 from serverModules.excelReader import rowToJSON, fetchSheets
 import os
 
+x = ["newTABLE","Name character varying(30) NOT NULL","Comments text","Number DOUBLE PRECISION NOT NULL"]
+
 def updatingByFile (file):
     cur = con.cursor()
     mySheets = fetchSheets(file)
@@ -84,3 +86,34 @@ def edit (editedInfo):
         cur.execute('ROLLBACK')
         con.commit()
         return 0
+
+def clearTable (table):
+    cur = con.cursor()
+    cur.execute('DELETE FROM "'+table+'"')
+    con.commit()
+
+def delTable (table):
+    cur = con.cursor()
+    cur.execute('DROP TABLE "'+table+'"')
+    con.commit()
+
+def newTable (info):
+    cur = con.cursor()
+    tableName = info[0]
+    del info[0]
+
+    command = 'CREATE TABLE public."'+tableName+'" ('
+    command += '"id" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 ),'
+
+    for column in info:
+        command += column + ','
+
+    command += 'PRIMARY KEY ("id")'
+    command += ');'
+    command += 'ALTER TABLE public."'+tableName+'" OWNER to hsfbsxtk;'
+
+    print(command)
+    #cur.execute(command)
+    #con.commit()
+
+newTable(x)
