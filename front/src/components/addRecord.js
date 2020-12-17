@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SweetAlert from 'sweetalert2';
 import axios from 'axios'
 
-export const addRecord = async (Columns, sheet) => {
+export const addRecord = async (Columns, sheet, setrefreshFire, refreshFire) => {
     let htmlContent = ''
     for (let i = 0; i < Columns.length; i++) {
         if (Columns[i] !== 'id')
@@ -41,13 +41,14 @@ export const addRecord = async (Columns, sheet) => {
                     .then((res) => {
                         console.log(res)
                         if (res.data !== undefined) {
-                            if (res.data.success)
+                            if (res.data.success) {
                                 SweetAlert.fire({
                                     title: "Success",
                                     text: "Record successfully added  ",
                                     icon: 'success',
                                 })
-
+                                setrefreshFire(refreshFire + 1)
+                            }
                             else
                                 SweetAlert.fire({
                                     title: "Error",

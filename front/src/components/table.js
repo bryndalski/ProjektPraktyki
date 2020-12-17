@@ -99,7 +99,7 @@ const Table = (props) => {
     useEffect(() => {
         dataFetch()
         filtring()
-    }, [props.sheetToImport])
+    }, [props.sheetToImport,props.refreshFire])
 
     useEffect(() => {
         filtring()

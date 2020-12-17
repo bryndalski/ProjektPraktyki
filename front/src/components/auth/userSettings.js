@@ -9,23 +9,22 @@ export const userSettings = async (user) => {
             showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: `<i class="fa fa-lock"/>`,
-            denyButtonText: `<i class="fa fa-users"/>`,
-            cancelButtonText: `<i class="fa fa-user-plus"/>`
+            denyButtonText: `<i class="fa fa-user-plus"/>`,
+            denyButtonColor: "green",
+            cancelButtonColor: "red",
+            cancelButtonText: `<i class="fa fa-times  "/>`,
 
         }).then((result) => {
             console.log(result)
             if (result.isConfirmed) {
                 passwordChange(user)
             } else if (result.isDenied) {
-            } else if (result.isDismissed) {
                 NewUser()
             }
         })
 
 
+    } else {
+        passwordChange(user)
     }
 }
-// export default userSettings
-
-    //< i id = "addusr"class="cardio fa fa-user-plus" aria - hiddentrue" ></i >
-    // <i id="settings" class="cardio fa fa-users" aria-hidden="true"></i>

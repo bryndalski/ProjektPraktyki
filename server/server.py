@@ -1,4 +1,4 @@
-from flask import Flask, app ,request,json
+from flask import Flask, app ,request,json , send_file
 from flask_cors import CORS
 from serverModules.DBShow import dataToShow
 from serverModules.DBTables import tablesToShow
@@ -35,11 +35,8 @@ def index():
 
 @app.route('/fetchColumn', methods=['POST'])
 def fetchColumn():
-    # print("temporary")
     data = request.json
-    #print(data['sheet'])
     beforeJson = dataToShow(data['sheet'])
-    #print(json.dumps(beforeJson))
     return json.dumps(beforeJson,sort_keys=False)
     return request.json
 
@@ -54,13 +51,14 @@ def fileImport():
     except:
         return({'message':"Something went wrong :(","success":"false"})
 
-@app.route('/fileExport', methods=['POST'])
+
+
+@app.route('/fileExport', methods=['GET'])
 def fileExport():
     try:
-        print(request.json)
-        return ({'message':"Sucessfull upload","success":"true"})
+        return send_file("./temp/raport-TG.xls",  as_attachment=True, attachment_filename="raport-TG.xls")
     except:
-        return({'message':"Something went wrong :(","success":"false"})
+        return({"success":False})
 
 
 @app.route('/newLine', methods=['POST'])  # adding row
@@ -141,7 +139,7 @@ def register():
         existing_user = users.find_one({'username' : request.json['username']})
         print(existing_user)
         print(request.json)
-        print("yje?")
+        
         if existing_user is None:
             try:
                 hashpass = bcrypt.hashpw(request.json['password'].encode('utf-8'), bcrypt.gensalt())
