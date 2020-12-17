@@ -25,6 +25,17 @@ body, .wholePage {
   flex-direction: row;
 }
 
+.cardio {
+  width: 33%;
+  font-size: 30pt;
+  margin: 3%;
+}
+
+.cardio:hover {
+  color: #727272;
+  cursor: pointer;
+}
+
 @media screen and (min-width: 450px) and (max-width: 991px) {
   .SheetSelect, .searching_input {
     width: 90% !important;

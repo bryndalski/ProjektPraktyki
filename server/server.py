@@ -128,7 +128,6 @@ def login():
     print(login_user)
     if login_user != None:
         if bcrypt.hashpw(request.json['password'].encode('utf-8'), login_user['password'].encode('utf-8')) == login_user['password'].encode('utf-8'):
-            print("oj boeiidbh[webgo[webgp;ebg;oqerbrg;ber;gubwewogo[qb")
             return ({'success':True,'user':{'username':login_user['username'],'email':login_user['email'],'permissions':login_user['permissions']}})
         else:
             return ({'success':False,'message':'Invalid username/password combination'})
@@ -141,6 +140,8 @@ def register():
         users = mongo.db.ABBDB
         existing_user = users.find_one({'username' : request.json['username']})
         print(existing_user)
+        print(request.json)
+        print("yje?")
         if existing_user is None:
             try:
                 hashpass = bcrypt.hashpw(request.json['password'].encode('utf-8'), bcrypt.gensalt())
@@ -149,15 +150,14 @@ def register():
                 'password' : hashpass.decode("utf-8"),
                 'email':request.json['email'],
                 'permissions':request.json['permissions'],
-
                 })        
                 return ({'success':True})
             except:
-                    return({'success1':False})
+                    return({'success':False})
         else:
             return({"success":False,'message':'user exisits'})
     except:
-        return({'success2':False})
+        return({'success':False})
 
 
 if __name__ == "__main__":

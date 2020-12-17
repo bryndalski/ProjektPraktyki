@@ -11,7 +11,6 @@ import { UserContext } from './auth/userContext'
 const Table = (props) => {
     //hooks for table
     const { user, Setuser } = useContext(UserContext) //contexr
-
     const [loading, setLoading] = useState(true)
     //for data
     const [dataFromSvr, setData] = useState([])
