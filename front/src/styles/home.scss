@@ -29,11 +29,16 @@ body,.wholePage{
     }
 
 }
-//!!!! CHANGE ME
-// .formRecord .swal2-html-container{
-//     // background-color: red !important;
-// }
-
+.cardio{
+    width:33%;
+    font-size:30pt;
+    margin:3%;
+    
+}
+.cardio:hover{
+    color: rgb(114, 114, 114);
+    cursor: pointer;
+    }
 
 @media screen and (min-width: 450px) and (max-width: 991px) 
 {
