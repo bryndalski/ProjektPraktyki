@@ -1,17 +1,17 @@
 from serverModules.DBConnect import con
-from serverModules.rememberColumns import object
+from serverModules.DBColumns import readColumns
 
 def dataToShow (table):
     cur = con.cursor()
     cur2 = con.cursor()
     valuesList = []
 
-    cur.execute('SELECT * FROM public."' + table + '"')
+    cur.execute('SELECT * FROM public."' + table + '" ORDER BY "id"')
     records = cur.fetchall()
 
     for rec in records:
         valuesObject = {}
-        columns = object[table]
+        columns = readColumns(table)
         i = 0
         for col in columns:
             checkValue = str(rec[i])
