@@ -20,16 +20,18 @@ const HomeComponent = () => {
     const [SearchModalStatus, ChangeSearchModalStatus] = useState('');       //status for search
     const { user, Setuser } = useContext(UserContext) //contexr
     const [Sheet, setSheet] = useState('TG')
+    document.title = `Patent Menager`;
+
     const userPermission = () => {
         if (user.permissions === 'admin') {
             return (
                 <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
                     <i title="Delete" onClick={() => dropTable(Sheet)} className="fa fa-trash"></i>
                     <i title="Refresh" onClick={() => { setrefreshFire(refreshFire + 1) }} className="fa fa-refresh" />
-                    <i title="User" onClick={() => userSettings(user)} className="fa fa-user"></i>
                     <i title="Add Record" onClick={() => { addRecord(Columns, Sheet, setrefreshFire, refreshFire) }} className="fa fa-plus"></i>
                     <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
                     <i title="Download sheet" onClick={() => fileDownload()} className="fa fa-download"></i>
+                    <i title="User" onClick={() => userSettings(user)} className="fa fa-user"></i>
                 </div >
             )
         }
