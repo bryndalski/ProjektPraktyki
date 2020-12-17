@@ -54,6 +54,4 @@ def exportExcel (tableName):
                 documentColumns += 1
         documentRows += 1
 
-    raport.save('../temp/raport-'+tableName+'.xls')
-
-exportExcel('TG')
+    raport.save('../temp/raport.xls')
