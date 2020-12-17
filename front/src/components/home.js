@@ -11,10 +11,11 @@ import { uploadAlert } from './upload';
 import { addRecord } from './addRecord'
 import { UserContext } from './auth/userContext'
 import { userSettings } from './auth/userSettings'
-// addRecord(Columns)
-
+import { fileDownload } from './download'
+import { dropTable } from './deleteTable'
 const HomeComponent = () => {
     //modals hooks
+    const [refreshFire, setrefreshFire] = useState(0)
     const [Columns, setColumns] = useState([])
     const [SearchModalStatus, ChangeSearchModalStatus] = useState('');       //status for search
     const { user, Setuser } = useContext(UserContext) //contexr
@@ -23,11 +24,21 @@ const HomeComponent = () => {
         if (user.permissions === 'moderator' || user.permissions === 'admin') {
             return (
                 <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
+                    <i title="Delete" onClick={() => dropTable(Sheet)} className="fa fa-trash"></i>
+                    <i title="Refresh" onClick={() => { setrefreshFire(refreshFire + 1) }} className="fa fa-refresh" />
                     <i title="User" onClick={() => userSettings(user)} className="fa fa-user"></i>
-                    <i title="Add Record" onClick={() => { addRecord(Columns, Sheet) }} className="fa fa-plus"></i>
+                    <i title="Add Record" onClick={() => { addRecord(Columns, Sheet, setrefreshFire, refreshFire) }} className="fa fa-plus"></i>
                     <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
-                    <i title="Download sheet" onClick={() => uploadAlert()} className="fa fa-download"></i>
+                    <i title="Download sheet" onClick={() => fileDownload()} className="fa fa-download"></i>
+                </div >
+            )
+        } if (user.permissions === 'guest') {
+            return (
+                <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
+                    <i title="Refresh" onClick={() => { setrefreshFire(refreshFire + 1) }} className="fa fa-refresh" />
+                    <i title="User" onClick={() => userSettings(user)} className="fa fa-user"></i>
                 </div>
+
             )
         }
     }
@@ -47,7 +58,7 @@ const HomeComponent = () => {
                 </nav>
                 <div className="tableContainer flex-grow-1">
                     <Table className="table"
-                        sheetToImport={Sheet} columnNames={setColumns} search={SearchModalStatus} />
+                        sheetToImport={Sheet} columnNames={setColumns} search={SearchModalStatus} refreshFire={refreshFire} />
                 </div>
 
             </div >
