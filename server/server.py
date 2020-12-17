@@ -54,6 +54,14 @@ def fileImport():
     except:
         return({'message':"Something went wrong :(","success":"false"})
 
+@app.route('/fileExport', methods=['POST'])
+def fileExport():
+    try:
+        print(request.json)
+        return ({'message':"Sucessfull upload","success":"true"})
+    except:
+        return({'message':"Something went wrong :(","success":"false"})
+
 
 @app.route('/newLine', methods=['POST'])  # adding row
 def newRecord():
@@ -81,6 +89,30 @@ def deleteRow():
         rem = request.json
         #print(rem)
         delete(rem)
+        return ({"success": True})
+    except:
+        return ({"success": False})
+
+@app.route('/newTable', methods=['POST'])  # edtowanie
+def newTable():
+    try:
+        print(request.json)
+        return ({"success": True})
+    except:
+        return ({"success": False})
+
+@app.route('/deleteTable', methods=['POST'])  # edtowanie
+def deleteTable():
+    try:
+        print(request.json)
+        return ({"success": True})
+    except:
+        return ({"success": False})
+
+@app.route('/clearTable', methods=['POST'])  # edtowanie
+def clearTable():
+    try:
+        print(request.json)
         return ({"success": True})
     except:
         return ({"success": False})
