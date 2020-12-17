@@ -22,7 +22,7 @@ export const fileDownload = async () => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'raport-TG.xls');
+                link.setAttribute('download', 'raport.xls');
                 document.body.appendChild(link);
                 link.click();
             })
