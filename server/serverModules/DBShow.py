@@ -54,6 +54,8 @@ def dataToShow (table):
                 setValue = dd + ' ' + mm + ' ' + rrrr
             else:
                 setValue = rec[i]
+            if str(setValue) == 'None':
+                setValue = ''
             valuesObject[col] = setValue
             i += 1
         valuesList.append(valuesObject)
