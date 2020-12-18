@@ -10,9 +10,14 @@ import SearchInput from './search';
 import { uploadAlert } from './upload';
 import { addRecord } from './addRecord'
 import { UserContext } from './auth/userContext'
-import { userSettings } from './auth/userSettings'
 import { fileDownload } from './download'
 import { dropTable } from './deleteTable'
+import { clearTable } from './clearTable'
+import { NewUser } from './auth/Options/addUser'
+import { passwordChange } from './auth/Options/passwordChange'
+
+
+
 const HomeComponent = () => {
     //modals hooks
     const [refreshFire, setrefreshFire] = useState(0)
@@ -26,12 +31,16 @@ const HomeComponent = () => {
         if (user.permissions === 'admin') {
             return (
                 <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
+                    <i title="Clear table" onClick={() => clearTable(Sheet)} className="fa fa-eraser  "></i>
                     <i title="Delete" onClick={() => dropTable(Sheet)} className="fa fa-trash"></i>
                     <i title="Refresh" onClick={() => { setrefreshFire(refreshFire + 1) }} className="fa fa-refresh" />
                     <i title="Add Record" onClick={() => { addRecord(Columns, Sheet, setrefreshFire, refreshFire) }} className="fa fa-plus"></i>
                     <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
                     <i title="Download sheet" onClick={() => fileDownload()} className="fa fa-download"></i>
-                    <i title="User" onClick={() => userSettings(user)} className="fa fa-user"></i>
+                    <i title="User" onClick={() => passwordChange(user)} className="fa fa-user"></i>
+                    {/* <i title="All users" onClick={() => userSettings(user)} className="fa fa-users "></i> */}
+                    <i title="Add user" onClick={() => NewUser(user)} className="fa fa-user-plus"></i>
+
                 </div >
             )
         }
@@ -39,10 +48,10 @@ const HomeComponent = () => {
             return (
                 <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
                     <i title="Refresh" onClick={() => { setrefreshFire(refreshFire + 1) }} className="fa fa-refresh" />
-                    <i title="User" onClick={() => userSettings(user)} className="fa fa-user"></i>
                     <i title="Add Record" onClick={() => { addRecord(Columns, Sheet, setrefreshFire, refreshFire) }} className="fa fa-plus"></i>
                     <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
                     <i title="Download sheet" onClick={() => fileDownload()} className="fa fa-download"></i>
+                    <i title="User" onClick={() => passwordChange(user)} className="fa fa-user"></i>
                 </div >
             )
         }
@@ -50,7 +59,7 @@ const HomeComponent = () => {
             return (
                 <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
                     <i title="Refresh" onClick={() => { setrefreshFire(refreshFire + 1) }} className="fa fa-refresh" />
-                    <i title="User" onClick={() => userSettings(user)} className="fa fa-user"></i>
+                    <i title="User" onClick={() => passwordChange(user)} className="fa fa-user"></i>
                 </div>
 
             )

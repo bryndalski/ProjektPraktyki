@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const passwordChange = async (user) => {
     const { value: formValues } = await SweetAlert.fire({
-        title: `Settinfs for ${user.username}`,
+        title: `Settings for ${user.username}`,
         html: `<label for="SweetAlert-email">Email</label>
             <input id="SweetAlert-email" class="swal2-input" placeholder='${user.email}' value='${user.email}'>
             <label for="SweetAlert-password">New Password</label>

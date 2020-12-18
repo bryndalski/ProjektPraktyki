@@ -9,8 +9,6 @@ from werkzeug.utils import secure_filename
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import bcrypt
-
-
 app=Flask(__name__)
 CORS(app)
 
@@ -177,6 +175,17 @@ def changeUsrData():
         except:
             return ({"success":False})
        
+@app.route('/printUser',methods=['GET'])
+def returnUsers():
+        returnUsers = []
+        users = mongo.db['ABBDB']
+        for x in users.find():
+            x= x.pop("username")
+            print(x)
+            returnUsers.append({x:x})
+            print('\n')
+        return json.dumps(returnUsers)
+
 
 
 
