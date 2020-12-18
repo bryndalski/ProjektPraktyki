@@ -1,14 +1,16 @@
-import re
 from flask import Flask, app ,request,json , send_file
 from flask_cors import CORS
 from serverModules.DBShow import dataToShow
 from serverModules.DBTables import tablesToShow
 from serverModules.DBUpdate import *
+from serverModules.saveExcel import exportExcel
 import os
 from werkzeug.utils import secure_filename
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import bcrypt
+
+
 app=Flask(__name__)
 CORS(app)
 
@@ -55,7 +57,8 @@ def fileImport():
 @app.route('/fileExport', methods=['GET'])
 def fileExport():
     try:
-        return send_file("./temp/raport-TG.xls",  as_attachment=True, attachment_filename="raport-TG.xls")
+        exportExcel()
+        return send_file("temp/raport.xls", as_attachment=True, attachment_filename="raport.xls")
     except:
         return({"success":False})
 
@@ -74,10 +77,10 @@ def newRecord():
 def editRecord():
     ed = request.json
     ifSuccess = edit(ed)
-    if ifSuccess == 1:
-        return ({"success": True})
-    else:
-        return ({"success": False})
+    #if ifSuccess == 1:
+    return ({"success": True})
+    #else:
+        #return ({"success": False})
 
 
 @app.route('/deleteRow', methods=['POST'])  # edtowanie
@@ -93,7 +96,6 @@ def deleteRow():
 @app.route('/newTable', methods=['POST'])  # edtowanie
 def newTable():
     try:
-        print(request.json)
         return ({"success": True})
     except:
         return ({"success": False})
@@ -101,7 +103,9 @@ def newTable():
 @app.route('/deleteTable', methods=['POST'])  # edtowanie
 def deleteTable():
     try:
-        print(request.json)
+        toDelete = request.json
+        #print(toDelete)
+        delTable(toDelete['sheet'])
         return ({"success": True})
     except:
         return ({"success": False})
@@ -155,38 +159,6 @@ def register():
             return({"success":False,'message':'user exisits'})
     except:
         return({'success':False})
-
-@app.route('/changeUsrData',methods=['POST'])
-def changeUsrData():
-        users = mongo.db.ABBDB
-        existing_user = users.find_one({'username' : request.json['username']})
-        print(str(existing_user))
-        print(request.json)
-        try:
-            if request.json['password'] != '':
-                print(request.json)
-                hashpass = bcrypt.hashpw(request.json['password'].encode('utf-8'), bcrypt.gensalt())
-                newvalues = { "$set": { "password": hashpass.decode("utf-8") }}
-                users.update_one({'username':request.json['username']}, newvalues)
-            if request.json['email'] !='' and request.json['email'] != existing_user['email']:
-                newvalues = { "$set": { "email": request.json['email'] }}
-                users.update_one({'username':request.json['username']}, newvalues)
-            return ({"success":True})
-        except:
-            return ({"success":False})
-       
-@app.route('/printUser',methods=['GET'])
-def returnUsers():
-        returnUsers = []
-        users = mongo.db['ABBDB']
-        for x in users.find():
-            x= x.pop("username")
-            print(x)
-            returnUsers.append({x:x})
-            print('\n')
-        return json.dumps(returnUsers)
-
-
 
 
 if __name__ == "__main__":
