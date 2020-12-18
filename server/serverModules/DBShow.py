@@ -56,6 +56,8 @@ def dataToShow (table):
                 setValue = rec[i]
             if str(setValue) == 'None':
                 setValue = ''
+            if not str(setValue).count("\\n") == 0:
+                setValue = setValue.replace("\\n"," ")
             valuesObject[col] = setValue
             i += 1
         valuesList.append(valuesObject)

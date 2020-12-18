@@ -77,10 +77,10 @@ def newRecord():
 def editRecord():
     ed = request.json
     ifSuccess = edit(ed)
-    #if ifSuccess == 1:
-    return ({"success": True})
-    #else:
-        #return ({"success": False})
+    if ifSuccess == 1:
+        return ({"success": True})
+    else:
+        return ({"success": False})
 
 
 @app.route('/deleteRow', methods=['POST'])  # edtowanie
@@ -95,6 +95,11 @@ def deleteRow():
 
 @app.route('/newTable', methods=['POST'])  # edtowanie
 def newTable():
+    tableInObject = request.json
+    tableInList = []
+    for col in tableInObject:
+        tableInList.append(tableInObject[col])
+    createTable(tableInList)
     try:
         return ({"success": True})
     except:

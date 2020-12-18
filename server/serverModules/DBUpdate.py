@@ -76,7 +76,7 @@ def edit (editedInfo):
     for edit in editedInfo:
         edited += '"' + edit + '" = ' + "'" + editedInfo[edit] + "', "
     edited = edited[0:-2].replace("''",'null')
-    print(edited)
+    #print(edited)
 
     try:
         cur.execute('UPDATE "public"."'+ sheet +'" SET '+ edited +' WHERE "id"='+ id)
@@ -98,21 +98,21 @@ def delTable (table):
     #print('DROP TABLE "public"."'+table+'"')
     con.commit()
 
-def newTable (info):
+def createTable (info):
     cur = con.cursor()
     tableName = info[0]
     del info[0]
 
     command = 'CREATE TABLE public."'+tableName+'" ('
-    command += '"id" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 ),'
+    command += '"id" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 ), '
 
     for column in info:
-        command += column + ','
+        command += '"' + column + '" TEXT, '
 
     command += 'PRIMARY KEY ("id")'
     command += ');'
     command += 'ALTER TABLE public."'+tableName+'" OWNER to hsfbsxtk;'
 
-    print(command)
-    #cur.execute(command)
-    #con.commit()
+    #print(command)
+    cur.execute(command)
+    con.commit()
