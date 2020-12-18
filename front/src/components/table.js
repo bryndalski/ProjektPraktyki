@@ -40,8 +40,7 @@ const Table = (props) => {
             .then((res) => {
                 if (res.data !== undefined) {
                     if (res.data.length !== 0) {
-                        if (res.data.length !== 1)
-                            setData(res.data)
+                        setData(res.data)
                         columnMaker(res.data)
                         setLoading(false)
                     }

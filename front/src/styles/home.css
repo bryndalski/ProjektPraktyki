@@ -40,14 +40,15 @@ body, .wholePage {
 
 @media screen and (min-width: 450px) and (max-width: 991px) {
   .SheetSelect, .searching_input {
-    width: 90% !important;
+    width: 30% !important;
     min-width: 110px;
   }
 
   .miniNav {
+    max-width: 30% !important;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
   .toogleBar {
@@ -63,7 +64,7 @@ body, .wholePage {
   .miniNav {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     margin: 0 !important;
     width: 90% !important;
   }
@@ -90,6 +91,10 @@ body, .wholePage {
 
 .table tbody:nth-child(2n+1) {
   background-color: #9e9e9e;
+}
+
+.table tbody:last-child {
+  display: none;
 }
 
 ::-webkit-scrollbar {

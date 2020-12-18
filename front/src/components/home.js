@@ -15,7 +15,7 @@ import { dropTable } from './deleteTable'
 import { clearTable } from './clearTable'
 import { NewUser } from './auth/Options/addUser'
 import { passwordChange } from './auth/Options/passwordChange'
-
+import { RodAdd } from './addTable'
 
 const HomeComponent = () => {
     //modals hooks
@@ -32,6 +32,7 @@ const HomeComponent = () => {
                 <div className="navbar-nav ml-auto mt-2 mt-lg-0 miniNav">
                     <i title="Clear table" onClick={() => clearTable(Sheet)} className="fa fa-eraser  "></i>
                     <i title="Delete" onClick={() => dropTable(Sheet)} className="fa fa-trash"></i>
+                    <i title="Add Table" onClick={() => RodAdd()} className="fa fa-table"></i>
                     <i title="Refresh" onClick={() => { setrefreshFire(refreshFire + 1) }} className="fa fa-refresh" />
                     <i title="Add Record" onClick={() => { addRecord(Columns, Sheet, setrefreshFire, refreshFire) }} className="fa fa-plus"></i>
                     <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
