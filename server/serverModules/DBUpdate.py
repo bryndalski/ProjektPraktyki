@@ -113,6 +113,6 @@ def newTable (info):
     command += ');'
     command += 'ALTER TABLE public."'+tableName+'" OWNER to hsfbsxtk;'
 
-    print(command)
+    #print(command)
     #cur.execute(command)
     #con.commit()
