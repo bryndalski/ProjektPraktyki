@@ -60,6 +60,12 @@ def dataToShow (table):
             i += 1
         valuesList.append(valuesObject)
 
+    columns = readColumns(table)
+    valuesObject = {}
+    for col in columns:
+        valuesObject[col]=''
+    valuesList.append(valuesObject)
+
     return valuesList
 
 
