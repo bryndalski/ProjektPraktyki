@@ -39,7 +39,6 @@ def fetchColumn():
     data = request.json
     beforeJson = dataToShow(data['sheet'])
     return json.dumps(beforeJson,sort_keys=False)
-    return request.json
 
 
 @app.route('/fileImport', methods=['POST'])
