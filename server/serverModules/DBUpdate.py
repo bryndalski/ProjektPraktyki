@@ -1,8 +1,5 @@
 from serverModules.DBConnect import con
 from serverModules.excelReader import rowToJSON, fetchSheets
-import os
-
-x = ["newTABLE","Name character varying(30) NOT NULL","Comments text","Number DOUBLE PRECISION NOT NULL"]
 
 def updatingByFile (file):
     cur = con.cursor()
@@ -18,8 +15,12 @@ def updatingByFile (file):
         data = rowToJSON(file,sheet)
         #print(data)
         for d in data:
+            for v in d:
+                tempStr = str(d[v])
+                tempStr = tempStr.replace("'"," ")
+                d[v] = tempStr
             key = str(d.keys())[11:-2].replace("'",'"')
-            val = str(d.values())[13:-2].replace('Null','')
+            val = str(d.values())[13:-2].replace("''",'null')
             lines += 1
             try:
                 #print('INSERT INTO "public"."'+ sheet +'" (' + key + ') VALUES (' + val + ')')
@@ -35,7 +36,6 @@ def updatingByFile (file):
         }
 
     con.commit()
-    os.remove(file)
 
     return defInfo
 
@@ -45,7 +45,7 @@ def updatingOneLine (newRecord):
     del newRecord['sheet']
 
     key = str(newRecord.keys())[11:-2].replace("'", '"')
-    val = str(newRecord.values())[13:-2].replace('Null','')
+    val = str(newRecord.values())[13:-2].replace("''",'null')
 
     try:
         cur.execute('INSERT INTO "public"."' + sheet + '" (' + key + ') VALUES (' + val + ')')
@@ -75,21 +75,21 @@ def edit (editedInfo):
 
     for edit in editedInfo:
         edited += '"' + edit + '" = ' + "'" + editedInfo[edit] + "', "
-    edited = edited[0:-2]
+    edited = edited[0:-2].replace("''",'null')
     print(edited)
 
-    #try:
-    cur.execute('UPDATE "public"."'+ sheet +'" SET '+ edited +'WHERE "id"='+ id)
-    con.commit()
-        #return 1
-    #except:
-        #cur.execute('ROLLBACK')
-        #con.commit()
-        #return 0
+    try:
+        cur.execute('UPDATE "public"."'+ sheet +'" SET '+ edited +' WHERE "id"='+ id)
+        con.commit()
+        return 1
+    except:
+        cur.execute('ROLLBACK')
+        con.commit()
+        return 0
 
-def clearTable (table):
+def clTable (table):
     cur = con.cursor()
-    cur.execute('DELETE FROM "'+table+'"')
+    cur.execute('DELETE FROM "public"."'+table+'"')
     con.commit()
 
 def delTable (table):
@@ -113,6 +113,6 @@ def newTable (info):
     command += ');'
     command += 'ALTER TABLE public."'+tableName+'" OWNER to hsfbsxtk;'
 
-    #print(command)
+    print(command)
     #cur.execute(command)
     #con.commit()
