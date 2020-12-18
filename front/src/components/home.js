@@ -15,7 +15,6 @@ import { dropTable } from './deleteTable'
 import { clearTable } from './clearTable'
 import { NewUser } from './auth/Options/addUser'
 import { passwordChange } from './auth/Options/passwordChange'
-import { UserControll } from './auth/Options/userControl'
 
 
 const HomeComponent = () => {
@@ -38,7 +37,6 @@ const HomeComponent = () => {
                     <i title="Upload Sheet " onClick={() => uploadAlert()} className="fa fa-upload"></i>
                     <i title="Download sheet" onClick={() => fileDownload()} className="fa fa-download"></i>
                     <i title="User" onClick={() => passwordChange(user)} className="fa fa-user"></i>
-                    <i title="All users" onClick={() => UserControll()} className="fa fa-users "></i>
                     <i title="Add user" onClick={() => NewUser(user)} className="fa fa-user-plus"></i>
 
                 </div >
