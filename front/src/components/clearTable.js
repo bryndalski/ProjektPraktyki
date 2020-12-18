@@ -34,24 +34,24 @@ export const clearTable = async (Sheet) => {
                         if (res.data.success) {
                             SweetAlert.fire({
                                 icon: 'success',
-                                title: "Table successfullly clear"
+                                title: "Table successfullly cleared"
                             })
                         } else {
                             SweetAlert.fire({
                                 icon: 'error',
-                                title: "Table could not be  clear"
+                                title: "Table could not be  cleared"
                             })
                         }
                     else {
                         SweetAlert.fire({
                             icon: 'error',
-                            title: "Table could not be  clear"
+                            title: "Table could not be  cleared"
                         })
                     }
                 else {
                     SweetAlert.fire({
                         icon: 'error',
-                        title: "Table could not be  clear"
+                        title: "Table could not be  cleared"
                     })
                 }
             })

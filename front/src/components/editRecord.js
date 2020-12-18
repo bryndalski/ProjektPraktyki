@@ -25,7 +25,7 @@ const editAlert = async (row, data, setData, editTrigger, seteditTrigger, sheet)
     }
     SweetAlert.fire({
         showCancelButton: true,
-        title: `Edit Record ${row.id}`,
+        title: `Edit Record`,
         html: htmlContent,
         allowOutsideClick: false,
     }).then((result) => {
