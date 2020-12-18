@@ -1,11 +1,10 @@
-import Axios from 'axios'
+import axios from 'axios'
 import SweetAlert from 'sweetalert2'
-import axios from Axios
+import { useState } from 'react'
 
 
 export const UserControll = async () => {
-    const [users, setUsers] = useState([])
-
+    const [users, setUsers] = useState({})
     const usersGetter = async () => {
         axios({
             method: "get",
@@ -16,22 +15,17 @@ export const UserControll = async () => {
 
         })
             .then((res) => {
-                setUsers(res.data)
+                console.log(res.data)
+                // setUser(res.data)
             })
     }
     await SweetAlert.fire({
         title: "Controll users",
-        html: <Select
-            placeholder="select User"
-            onMenuOpen={usersGetter}
-            isSearchable={true}
-            options={users}
-            name="users"
-            defaultOptions={true}
-            className="SheetSelect m-2"
-            onChange={e => { console.log(e.value) }}
-        />
-
+        onOpen: () => {
+            usersGetter()
+        },
+        input: 'select',
+        inputOptions: users,
     })
 
 

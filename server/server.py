@@ -177,12 +177,12 @@ def changeUsrData():
        
 @app.route('/printUser',methods=['GET'])
 def returnUsers():
-        returnUsers = []
+        returnUsers = {}
         users = mongo.db['ABBDB']
         for x in users.find():
             x= x.pop("username")
             print(x)
-            returnUsers.append({x:x})
+            returnUsers.update({x:x})
             print('\n')
         return json.dumps(returnUsers)
 
