@@ -26,6 +26,9 @@ body,.wholePage{
     .miniNav{
         display: flex;
         flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+
     }
 
 }
