@@ -7,7 +7,7 @@ import axios from 'axios'
 export const uploadAlert = async () => {
     const { value: file } = await SweetAlert.fire({
         title: 'Upload file',
-        text: "your file needs to be saved as XLSX",
+        text: "your file needs to be saved as XLS or XLSX",
         input: 'file',
         inputAttributes: {
             'accept': '.xlsx,.xls', //TODO remove second condition
@@ -16,7 +16,7 @@ export const uploadAlert = async () => {
     })
     if (file) {
         if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel') { //TODO remove second condition
-            try { 
+            try {
                 let data = new FormData()
                 data.append('file', file)
                 axios({

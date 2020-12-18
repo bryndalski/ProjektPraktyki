@@ -40,7 +40,8 @@ const Table = (props) => {
             .then((res) => {
                 if (res.data !== undefined) {
                     if (res.data.length !== 0) {
-                        setData(res.data)
+                        if (res.data.length !== 1)
+                            setData(res.data)
                         columnMaker(res.data)
                         setLoading(false)
                     }
@@ -99,7 +100,7 @@ const Table = (props) => {
     useEffect(() => {
         dataFetch()
         filtring()
-    }, [props.sheetToImport,props.refreshFire])
+    }, [props.sheetToImport, props.refreshFire])
 
     useEffect(() => {
         filtring()
