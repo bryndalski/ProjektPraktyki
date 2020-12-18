@@ -160,6 +160,19 @@ def register():
     except:
         return({'success':False})
 
+@app.route('/printUser',methods=['GET'])
+def returnUsers():
+        returnUsers = {}
+        users = mongo.db['ABBDB']
+        for x in users.find():
+            x= x.pop("username")
+            print(x)
+            returnUsers.update({x:x})
+            print('\n')
+        return json.dumps(returnUsers)
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
