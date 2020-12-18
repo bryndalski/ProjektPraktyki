@@ -26,7 +26,6 @@ const LoginComponent = () => {
                 url: "http://localhost:5000/login",
             })
                 .then((res) => {
-                    console.log(res.data)
                     setResponse(res.data.message)
                     if (res.data.success) {
                         new Promise(() => {
@@ -37,7 +36,6 @@ const LoginComponent = () => {
                         }).then(() => {
                             return <Redirect to='/home' />
                         })
-                        console.log(res.data);
                     }
                 })
         } else {

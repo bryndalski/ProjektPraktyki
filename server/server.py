@@ -1,3 +1,4 @@
+import re
 from flask import Flask, app ,request,json , send_file
 from flask_cors import CORS
 from serverModules.DBShow import dataToShow
@@ -8,8 +9,6 @@ from werkzeug.utils import secure_filename
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import bcrypt
-
-
 app=Flask(__name__)
 CORS(app)
 
@@ -156,6 +155,38 @@ def register():
             return({"success":False,'message':'user exisits'})
     except:
         return({'success':False})
+
+@app.route('/changeUsrData',methods=['POST'])
+def changeUsrData():
+        users = mongo.db.ABBDB
+        existing_user = users.find_one({'username' : request.json['username']})
+        print(str(existing_user))
+        print(request.json)
+        try:
+            if request.json['password'] != '':
+                print(request.json)
+                hashpass = bcrypt.hashpw(request.json['password'].encode('utf-8'), bcrypt.gensalt())
+                newvalues = { "$set": { "password": hashpass.decode("utf-8") }}
+                users.update_one({'username':request.json['username']}, newvalues)
+            if request.json['email'] !='' and request.json['email'] != existing_user['email']:
+                newvalues = { "$set": { "email": request.json['email'] }}
+                users.update_one({'username':request.json['username']}, newvalues)
+            return ({"success":True})
+        except:
+            return ({"success":False})
+       
+@app.route('/printUser',methods=['GET'])
+def returnUsers():
+        returnUsers = []
+        users = mongo.db['ABBDB']
+        for x in users.find():
+            x= x.pop("username")
+            print(x)
+            returnUsers.append({x:x})
+            print('\n')
+        return json.dumps(returnUsers)
+
+
 
 
 if __name__ == "__main__":
