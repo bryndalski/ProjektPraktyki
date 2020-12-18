@@ -19,7 +19,7 @@ def updatingByFile (file):
         #print(data)
         for d in data:
             key = str(d.keys())[11:-2].replace("'",'"')
-            val = str(d.values())[13:-2].replace("''","null")
+            val = str(d.values())[13:-2].replace('Null','')
             lines += 1
             try:
                 #print('INSERT INTO "public"."'+ sheet +'" (' + key + ') VALUES (' + val + ')')
@@ -45,7 +45,7 @@ def updatingOneLine (newRecord):
     del newRecord['sheet']
 
     key = str(newRecord.keys())[11:-2].replace("'", '"')
-    val = str(newRecord.values())[13:-2].replace("''", "null")
+    val = str(newRecord.values())[13:-2].replace('Null','')
 
     try:
         cur.execute('INSERT INTO "public"."' + sheet + '" (' + key + ') VALUES (' + val + ')')
@@ -76,16 +76,16 @@ def edit (editedInfo):
     for edit in editedInfo:
         edited += '"' + edit + '" = ' + "'" + editedInfo[edit] + "', "
     edited = edited[0:-2]
-    #print(edited)
+    print(edited)
 
-    try:
-        cur.execute('UPDATE "'+ sheet +'" SET '+ edited +'WHERE "id"='+ id)
-        con.commit()
-        return 1
-    except:
-        cur.execute('ROLLBACK')
-        con.commit()
-        return 0
+    #try:
+    cur.execute('UPDATE "public"."'+ sheet +'" SET '+ edited +'WHERE "id"='+ id)
+    con.commit()
+        #return 1
+    #except:
+        #cur.execute('ROLLBACK')
+        #con.commit()
+        #return 0
 
 def clearTable (table):
     cur = con.cursor()
@@ -95,6 +95,7 @@ def clearTable (table):
 def delTable (table):
     cur = con.cursor()
     cur.execute('DROP TABLE "'+table+'"')
+    #print('DROP TABLE "public"."'+table+'"')
     con.commit()
 
 def newTable (info):
@@ -115,5 +116,3 @@ def newTable (info):
     print(command)
     #cur.execute(command)
     #con.commit()
-
-newTable(x)
