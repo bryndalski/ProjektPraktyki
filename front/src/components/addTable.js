@@ -1,6 +1,5 @@
 import SweetAlert from 'sweetalert2'
 import axios from 'axios'
-
 export const RodAdd = async () => {
     let dataObject = {}
     SweetAlert.fire({
@@ -28,7 +27,6 @@ export const RodAdd = async () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     dataObject['col_num'] = result.value
-                    console.log(dataObject)
                     let queueArray = []
                     for (let i = 1; i <= dataObject.col_num; i++) {
                         queueArray.push({ title: `Column ${i}` })
@@ -81,14 +79,9 @@ export const RodAdd = async () => {
                                     }
                                 })
                             }
-
                     })
                 }
-
             })
         }
     })
-
-
-
 }
